@@ -1,6 +1,17 @@
 <!doctype html>
 <html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="referrer" content="no-referrer"><title>ММЦ Мосфильмовская — готовность помещений</title>
-<style>:root{--cds-dur-slow:.4s;--cds-ease-out:cubic-bezier(.2,.8,.2,1);--font-anthropic-sans:system-ui,sans-serif}html,body{margin:0;background:#d6d8d7}#dash-root{max-width:1600px;margin:0 auto;padding:16px}#g-grid,#lb{display:none!important}#g-live iframe{display:block;width:100%;height:min(75vh,820px);border:0;border-radius:18px;background:#fff}</style></head><body><div id="dash-root"><style>
+<style>:root{--cds-dur-slow:.4s;--cds-ease-out:cubic-bezier(.2,.8,.2,1);--font-anthropic-sans:system-ui,sans-serif}html,body{margin:0;background:#d6d8d7}#dash-root{max-width:1600px;margin:0 auto;padding:16px}#g-grid,#lb{display:none!important}#g-live iframe{display:block;width:100%;height:min(75vh,820px);border:0;border-radius:18px;background:#fff}#g-live .gl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+#g-live .gl-t{position:relative;display:block;aspect-ratio:4/3;border-radius:14px;overflow:hidden;background:#e9eaea;text-decoration:none;color:var(--ink)}
+#g-live .gl-t:first-child{grid-column:span 2;grid-row:span 2}
+#g-live .gl-t img{width:100%;height:100%;object-fit:cover;display:block}
+#g-live .gl-t span{position:absolute;left:8px;bottom:8px;font-size:11px;color:#fff;background:rgba(0,0,0,.45);backdrop-filter:blur(6px);padding:3px 8px;border-radius:99px}
+#g-live .gl-t.pdf{display:flex;align-items:center;justify-content:center;padding:10px}
+#g-live .gl-t.pdf i{font-style:normal;font-size:12px;text-align:center;color:var(--mut);word-break:break-word}
+#g-live .gl-t.pdf span{background:rgba(0,0,0,.35)}
+#g-live .gl-sk{aspect-ratio:4/3;border-radius:14px;background:linear-gradient(90deg,#e4e5e4,#eef0ef,#e4e5e4);background-size:200% 100%;animation:glsk 1.2s infinite linear}
+@keyframes glsk{to{background-position:-200% 0}}
+@media (max-width:520px){#g-live .gl-grid{grid-template-columns:1fr 1fr}}
+</style></head><body><div id="dash-root"><style>
 .sx svg text{font-family:inherit}
 .sx{--bg:#d6d8d7;--bg2:#e4e5e4;--ink:#1b1d1f;--mut:#7c8083;--glass:rgba(255,255,255,.34);--glass-b:rgba(255,255,255,.55);--dk:#27292c;--dk2:#1e2023;--ok:#7fa88f;--wip:#c4ab82;--bad:#e5472d;--nr:#4a4e52;font-family:"Geist","Inter Display","Inter","SF Pro Display",-apple-system,BlinkMacSystemFont,"Segoe UI Variable Display","Segoe UI Variable Text","Segoe UI","Manrope","Helvetica Neue",var(--font-anthropic-sans),sans-serif;font-feature-settings:"ss01","cv11";-webkit-font-smoothing:antialiased;letter-spacing:-.005em;color:var(--ink);display:flex;flex-direction:column;gap:12px;font-weight:300}
 .sx *{box-sizing:border-box}
@@ -525,12 +536,28 @@ async function live(){st('Обновляю из таблицы…');try{const[a,
  if(ra.length<3)throw new Error('empty');const cv=c?[['h']].concat(c.rows.map(r=>(r.c||[]).map(cell))):null;await put(Object.assign({rooms:{sheets:[{data:[{rowData:ra}]}]},norms:{values:nb}},cv?{crews:{values:cv}}:{}));
  const d=new Date();st('Онлайн · обновлено '+d.toLocaleDateString('ru-RU')+' '+d.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'}));
 }catch(e){st('Нет связи с таблицей · данные на 13.10.2026')}}
+const GAS_URL='';
+let galN=0;const gasList=(id)=>new Promise((res,rej)=>{const cb='__gal'+(++galN);const sc=document.createElement('script');const to=setTimeout(()=>{done();rej(new Error('timeout'))},15000);
+ const done=()=>{clearTimeout(to);delete window[cb];sc.remove()};window[cb]=(d)=>{done();d&&d.ok?res(d.files||[]):rej(new Error('gas'))};sc.onerror=()=>{done();rej(new Error('net'))};
+ sc.src=GAS_URL+'?folder='+encodeURIComponent(id)+'&callback='+cb+'&_='+Date.now();document.head.appendChild(sc)});
+const fmtD=(t)=>{const d=new Date(t);return d.toLocaleDateString('ru-RU',{day:'2-digit',month:'2-digit',year:'numeric'})+' · '+d.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'})};
+const iframeGal=(box,id)=>{box.innerHTML='<iframe title="Фото помещения" loading="lazy" referrerpolicy="no-referrer" src="https://drive.google.com/embeddedfolderview?id='+id+'#grid"></iframe>'};
+const tile=(f)=>{const a=document.createElement('a');a.className='gl-t';a.href='https://drive.google.com/file/d/'+f.id+'/view';a.target='_blank';a.rel='noopener noreferrer';
+ if(f.mime==='application/pdf'){const p=document.createElement('i');p.textContent='PDF';a.append(p);a.classList.add('pdf')}
+ else{const im=document.createElement('img');im.loading='lazy';im.alt=f.name;im.referrerPolicy='no-referrer';let k=0;const src=['https://lh3.googleusercontent.com/d/'+f.id+'=w700','https://drive.google.com/thumbnail?id='+f.id+'&sz=w700'];
+  im.src=src[0];im.onerror=()=>{k++;if(k<src.length)im.src=src[k];else{im.remove();const p=document.createElement('i');p.textContent=f.name;a.prepend(p);a.classList.add('pdf')}};a.append(im)}
+ const c=document.createElement('span');c.textContent=fmtD(f.created);a.append(c);return a};
 const liveGal=()=>{const sec=document.getElementById('gallery');if(!sec)return;const r=params.gallery;let box=document.getElementById('g-live');
  if(!r){if(box)box.remove();return}
  const rm=(cache.rooms||[]).find(x=>x.room===r);const m=/\/folders\/([A-Za-z0-9_-]+)/.exec((rm&&rm.photo)||'');const id=m?m[1]:FOLD[r];if(!id)return;
  if(!box){box=document.createElement('div');box.id='g-live';const g=document.getElementById('g-grid');g.parentNode.insertBefore(box,g)}
- if(box.dataset.id!==id){box.dataset.id=id;box.innerHTML='<iframe title="Фото помещения" loading="lazy" referrerpolicy="no-referrer" src="https://drive.google.com/embeddedfolderview?id='+id+'#grid"></iframe>'}
- const n=document.getElementById('g-note');if(n)n.textContent='Все фото из папки в реальном времени — новые появляются сразу. Нажмите на фото, чтобы открыть его на весь экран в Google Drive.';};
+ const n=document.getElementById('g-note');
+ if(box.dataset.id===id)return;box.dataset.id=id;
+ if(!GAS_URL){iframeGal(box,id);if(n)n.textContent='Все фото из папки в реальном времени. Нажмите на фото, чтобы открыть его в Google Drive.';return}
+ box.innerHTML='<div class="gl-grid"><div class="gl-sk"></div><div class="gl-sk"></div><div class="gl-sk"></div><div class="gl-sk"></div></div>';if(n)n.textContent='Загружаю фото…';
+ gasList(id).then((files)=>{if(box.dataset.id!==id)return;files.sort((a,b)=>b.created-a.created);const g=document.createElement('div');g.className='gl-grid';files.forEach(f=>g.append(tile(f)));box.replaceChildren(g);
+  const ph=files.filter(f=>f.mime!=='application/pdf').length,pd=files.length-ph;if(n)n.textContent=files.length?('Сначала новые · '+ph+' фото'+(pd?' · '+pd+' PDF':'')):'В папке пока нет фото.'})
+ .catch(()=>{if(box.dataset.id!==id)return;iframeGal(box,id);if(n)n.textContent='Все фото из папки в реальном времени. Нажмите на фото, чтобы открыть его в Google Drive.'});};
 window.__boot=async()=>{subs.push(liveGal);await put(RAW);st('Данные на 13.10.2026');live()};
 })();
 

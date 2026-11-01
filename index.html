@@ -472,6 +472,26 @@ body::before{content:"";position:fixed;inset:-10%;z-index:-1;pointer-events:none
 .sx-sys div{border-bottom-color:var(--line2)}.sx-sys div span:first-child{color:var(--mut2)}
 .sx-sb:hover,.sx-sb.on{background:rgba(255,255,255,.7)}
 .sx-sec.dark .sx-note,.sx-panel .sx-note{color:var(--mut2)}
+
+/* === v5: шкалы выполнения === */
+:root{--bar-ok:linear-gradient(90deg,#6ee7b7 0%,#10b981 100%);--bar-wip:linear-gradient(90deg,#fde68a 0%,#f59e0b 100%);--bar-nr:rgba(15,23,42,.06)}
+.rd-bar,.sx-sb-bar,.sx-mini,.sx-cb-bar,.sx-area-bar{background:rgba(15,23,42,.06)!important;box-shadow:inset 0 1px 2px rgba(15,23,42,.08);border-radius:99px;gap:3px;overflow:hidden}
+.rd-bar{height:12px;padding:0}.rd-bar.sm{height:7px}
+.rd-bar i,.bf{position:relative;border-radius:99px;overflow:hidden}
+.rd-bar i.r{background:var(--bar-ok)!important;box-shadow:0 0 14px -3px rgba(16,185,129,.65)}
+.rd-bar i.w{background:var(--bar-wip)!important;box-shadow:0 0 14px -3px rgba(245,158,11,.6)}
+.bf.bo{box-shadow:0 0 12px -3px rgba(16,185,129,.6)}.bf.bw{box-shadow:0 0 12px -3px rgba(245,158,11,.55)}.bf.bn{box-shadow:none}
+.rd-bar i.w::after,.bf.bw::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 0%,rgba(255,255,255,.55) 45%,transparent 70%);transform:translateX(-120%);animation:barSheen 2.8s cubic-bezier(.4,0,.2,1) 1.1s infinite}
+.rd-bar i.r::before,.bf.bo::before{content:"";position:absolute;inset:0 0 50% 0;background:linear-gradient(180deg,rgba(255,255,255,.45),transparent);border-radius:99px 99px 0 0}
+@keyframes barSheen{0%{transform:translateX(-120%)}60%,100%{transform:translateX(220%)}}
+.bf{animation:barIn 1s cubic-bezier(.2,.8,.2,1) both}
+@keyframes barIn{from{width:0}}
+.rd-leg i.r{background:var(--bar-ok)}.rd-leg i.w{background:var(--bar-wip)}
+.rd-v b{background:linear-gradient(90deg,#0f172a,#334155);-webkit-background-clip:text;background-clip:text;color:transparent}
+.rd-v small{color:#d97706}
+.rd-row{transition:background .25s,transform .25s}.rd-row:hover{transform:translateX(2px)}
+.rd-row:hover .rd-bar i.r{filter:brightness(1.06)}
+@media (prefers-reduced-motion:reduce){.bf,.rd-bar i::after,.bf::after{animation:none!important}}
 </style>
 
 <div class="sx">
@@ -981,6 +1001,8 @@ dash.calc('norm_issues', {
   const $ = (s) => root.querySelector(s);
   const SYS = window.WORKS.map((w) => [w.k, w.l, w.s, w.o]);
   const C = { ok: '#34b27b', wip: '#f2b33d', nr: '#d0d5dd', bad: '#e5472d' };
+  const grad = (c) => (c === C.ok ? 'var(--bar-ok)' : c === C.wip ? 'var(--bar-wip)' : c === C.nr ? 'var(--bar-nr)' : c);
+  const bcls = (c) => 'bf ' + (c === C.ok ? 'bo' : c === C.wip ? 'bw' : 'bn');
   const ARROW = '<svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg>';
   const enc = (v) => String(v).replace(/%/g, '%25').replace(/&/g, '%26').replace(/=/g, '%3D');
   const wh = (o) => Object.entries(o).map(([k, v]) => k + '=' + enc(v)).join('&');
@@ -1110,7 +1132,7 @@ dash.calc('norm_issues', {
       const h = mk('div', 'sx-wk-h'); h.append(mk('b', '', full), mk('small', '', rel.length ? rel.length + ' пом. по проекту' : 'не предусмотрено'));
       const v = mk('div', 'sx-wk-v'); v.append(mk('span', '', String(rd.length)), document.createTextNode('выполнено в ' + plural(rd.length) + (wp.length ? ' · ' + wp.length + ' в работе' : '')));
       const bar = mk('div', 'sx-wk-bar');
-      if (rel.length) { const a = mk('i'); a.style.width = (rd.length / rel.length * 100) + '%'; a.style.background = C.ok; const b = mk('i'); b.style.width = (wp.length / rel.length * 100) + '%'; b.style.background = C.wip; bar.append(a, b); }
+      if (rel.length) { const a = mk('i'); a.style.width = (rd.length / rel.length * 100) + '%'; a.style.background = grad(C.ok); a.className = bcls(C.ok); const b = mk('i'); b.style.width = (wp.length / rel.length * 100) + '%'; b.style.background = grad(C.wip); b.className = bcls(C.wip); bar.append(a, b); }
       card.append(h, v, bar);
       const chips = (list, cls, label) => {
         if (!list.length) return;
@@ -1302,7 +1324,7 @@ dash.calc('norm_issues', {
     h.append(left, ring); c.append(h);
     if (prog) {
       const blk = mk('div', 'sx-cb');
-      const bar = mk('div', 'sx-cb-bar'); [['ready_pct', C.ok], ['work_pct', C.wip]].forEach(([f, col]) => { const i = mk('i'); i.style.width = prog[f] + '%'; i.style.background = col; bar.append(i); });
+      const bar = mk('div', 'sx-cb-bar'); [['ready_pct', C.ok], ['work_pct', C.wip]].forEach(([f, col]) => { const i = mk('i'); i.style.width = prog[f] + '%'; i.style.background = grad(col); i.className = bcls(col); bar.append(i); });
       const leg = mk('div', 'sx-cb-leg');
       const l1 = mk('span'); l1.style.setProperty('--c', C.ok); l1.append('Готово ', mark(mk('b', '', prog.ready_pct), 'room_progress', 'ready_pct', W), '%');
       const l2 = mk('span'); l2.style.setProperty('--c', C.wip); l2.append('В работе ', mark(mk('b', '', prog.work_pct), 'room_progress', 'work_pct', W), '%');
@@ -1442,7 +1464,7 @@ dash.calc('norm_issues', {
         const w = { ...sw, system: r.system };
         const row = mk('div', 'sx-sb' + (s.sys === r.system ? ' on' : ''));
         const bar = mk('div', 'sx-sb-bar');
-        [['ready_pct', C.ok], ['work_pct', C.wip], ['not_pct', C.nr]].forEach(([f, col]) => { if (r[f] > 0) { const i = mk('i'); i.style.width = r[f] + '%'; i.style.background = col; bar.append(i); } });
+        [['ready_pct', C.ok], ['work_pct', C.wip], ['not_pct', C.nr]].forEach(([f, col]) => { if (r[f] > 0) { const i = mk('i'); i.style.width = r[f] + '%'; i.style.background = grad(col); i.className = bcls(col); bar.append(i); } });
         const v = mk('span', 'sx-sb-v'); v.append(mark(mk('span', '', r.ready_pct), 'by_system', 'ready_pct', w), '%');
         row.append(mark(mk('span', 'sx-sb-l', r.label), 'by_system', 'label', w), bar, v);
         row.addEventListener('click', () => { dash.setParams({ sys: s.sys === r.system ? null : r.system }); if (s.sys !== r.system) document.getElementById('rooms').scrollIntoView({ behavior: 'smooth', block: 'start' }); });
@@ -1457,7 +1479,7 @@ dash.calc('norm_issues', {
         const b = mk('button', 'sx-floor' + (s.fl === r.floor ? ' on' : '')); b.type = 'button';
         const t = mk('div', 'sx-floor-t'); const ft = mk('span'); ft.append('Этаж ', mark(mk('span', '', r.floor), 'by_floor', 'floor', w)); const fr = mk('span'); fr.append(mark(mk('span', '', r.rooms), 'by_floor', 'rooms', w), ' пом.'); t.append(ft, fr);
         const v = mk('div', 'sx-floor-v'); v.append(mark(mk('span', '', r.ready_pct), 'by_floor', 'ready_pct', w), mk('sup', '', '% готово'));
-        const bar = mk('div', 'sx-mini'); [['ready_pct', C.ok], ['work_pct', C.wip]].forEach(([f, col]) => { const i = mk('i'); i.style.width = r[f] + '%'; i.style.background = col; bar.append(i); });
+        const bar = mk('div', 'sx-mini'); [['ready_pct', C.ok], ['work_pct', C.wip]].forEach(([f, col]) => { const i = mk('i'); i.style.width = r[f] + '%'; i.style.background = grad(col); i.className = bcls(col); bar.append(i); });
         const d = mk('div', 'sx-floor-t'); d.style.textTransform = 'none'; d.style.letterSpacing = '0'; d.style.justifyContent = 'flex-start'; d.style.gap = '.3em'; d.style.whiteSpace = 'pre';
         d.append('МИП-НАНО ', mark(mk('span', '', r.mip_from), 'by_floor', 'mip_from', w)); if (r.mip_to && r.mip_to !== r.mip_from) d.append(' – ', mark(mk('span', '', r.mip_to), 'by_floor', 'mip_to', w));
         b.append(t, v, bar, d);

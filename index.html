@@ -368,6 +368,7 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 .sx-gal-sec::after{display:none}
 #g-live{position:relative;z-index:6}
 #g-live iframe{background:#fff;min-height:420px}
+@media (max-width:600px){.in-frame .sx-tabbar{position:absolute;top:8px;bottom:auto}.in-frame #dash-root{padding-top:84px}}
 </style>
 
 <div class="sx">
@@ -538,7 +539,7 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 
 
 
-<nav class="sx-tabbar" id="sx-tabbar" aria-label="Разделы">
+<script>try{if(self!==top)document.documentElement.classList.add("in-frame")}catch(e){document.documentElement.classList.add("in-frame")}</script><nav class="sx-tabbar" id="sx-tabbar" aria-label="Разделы">
 <button type="button" data-go="overview"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 12l4-4"/></svg>Обзор</button>
 <button type="button" data-go="profile"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg>Помещения</button>
 <button type="button" data-go="systems"><svg viewBox="0 0 24 24"><path d="M4 18h16M4 13h16M4 8h16"/></svg>Этажи</button>

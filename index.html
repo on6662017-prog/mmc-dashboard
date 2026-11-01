@@ -333,7 +333,7 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 @media (max-width:600px){#to-table{display:none}.sx-headline h1 span{font-size:.36em}}
 /* === v2 «Paper»: градиентная бумага, зерно, крупный гротеск, кремовые пилюли, ржавый акцент === */
 .sx{--cream:#efe9dc;--cream2:#f6f2e9;--rust:#b4401f;--rust2:#e2481f;--ink:#111214;--mut:#6d6a63;--glass:rgba(246,242,233,.62);--glass-b:rgba(255,255,255,.7);--dk:#121314;--bad:#e2481f;--paper-a:radial-gradient(70% 60% at 85% 18%,#9ec3e6 0,transparent 60%),radial-gradient(60% 55% at 12% 85%,#a99ad6 0,transparent 62%),radial-gradient(55% 50% at 80% 88%,#d9c39a 0,transparent 60%),linear-gradient(160deg,#d8d6cf,#cfd3d6);--paper-sage:radial-gradient(80% 70% at 50% 30%,#c9d3bf 0,transparent 70%),linear-gradient(180deg,#b9c3ae,#aeb8a3);--paper-peach:radial-gradient(70% 60% at 85% 25%,#e8857a 0,transparent 60%),radial-gradient(70% 70% at 15% 80%,#e0b071 0,transparent 65%),linear-gradient(160deg,#ead7bd,#e3b68f)}
-.sx-sec{border-radius:34px;box-shadow:0 0 0 7px #0d0e10,0 30px 60px -30px rgba(0,0,0,.55);margin:7px}
+.sx-sec{border-radius:30px}
 .sx-sec::after{content:"";position:absolute;inset:0;z-index:5;pointer-events:none;opacity:.22;mix-blend-mode:multiply;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 .sx-sec#overview{background:var(--paper-a)}
 .sx-sec.light{background:linear-gradient(170deg,var(--cream2),#e7e1d3)}
@@ -364,7 +364,7 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 .sx-take{background:rgba(17,18,20,.86);color:#f3efe6;border-radius:999px;padding:12px 22px}
 .sx-take *{color:#fff!important}
 .sx-dark-tbl,.sx-sec.dark .sx-glass{border-radius:22px}
-@media (max-width:600px){.sx-sec{border-radius:26px;box-shadow:0 0 0 5px #0d0e10;margin:5px}.sx-take{border-radius:20px}}
+@media (max-width:600px){.sx-sec{border-radius:24px}.sx-take{border-radius:20px}}
 </style>
 
 <div class="sx">

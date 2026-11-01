@@ -600,7 +600,7 @@ let n=0;const gv=(sheet)=>new Promise((res,rej)=>{const cb='__gv'+(++n);const s=
  const cleanup=()=>{clearTimeout(to);delete window[cb];s.remove()};window[cb]=(d)=>{cleanup();d&&d.status!=='error'?res(d.table):rej(new Error('gviz'))};s.onerror=()=>{cleanup();rej(new Error('net'))};
  s.src='https://docs.google.com/spreadsheets/d/'+SID+'/gviz/tq?headers=1&sheet='+encodeURIComponent(sheet)+'&tqx=responseHandler:'+cb+'&_='+Date.now();document.head.appendChild(s)});
 const cell=(c)=>c==null?'':(c.f!=null?String(c.f):c.v==null?'':String(c.v));
-async function live(){st('Обновляю из таблицы…');try{const[a,b,c,m1,m2,ab]=await Promise.all([gv('Готовность помещений'),gv('Нормативы'),gv('Бригады').catch(()=>null),gv('МИП-НАНО').catch(()=>null),gv('МОНАРТ').catch(()=>null),gv('Воздухозаборки').catch(()=>null)]);
+async function live(){st('Обновляю из таблицы…');try{const[a,b,c,m1,m2,ab]=await Promise.all([gv('Помещения'),gv('Нормативы'),gv('Бригады').catch(()=>null),gv('МИП-НАНО').catch(()=>null),gv('МОНАРТ').catch(()=>null),gv('Воздухозаборки').catch(()=>null)]);
  const sh=(t)=>t?{data:[{rowData:[{values:t.cols.map(c=>({formattedValue:c.label||''}))}].concat(t.rows.map(r=>({values:(r.c||[]).map(c=>({formattedValue:cell(c)}))})))}]}:null;
  const ra=[{values:[]}].concat(a.rows.map(r=>({values:(r.c||[]).map(c=>({formattedValue:cell(c)}))})));
  const nb=[['h']].concat(b.rows.map(r=>(r.c||[]).map(cell)));
@@ -637,13 +637,15 @@ window.__boot=async()=>{subs.push(liveGal);await put(RAW);st('Данные на 
 window.WORKS = [{"k":"antibac","l":"Антибак","s":"Антибак","o":"mip"},{"k":"frame","l":"Стеновой каркас","s":"Ст. каркас","o":"mip"},{"k":"wpan","l":"Стеновые панели","s":"Ст. панели","o":"mip"},{"k":"airin","l":"Воздухозаборки","s":"Воздухозаб.","o":"mip"},{"k":"vwin","l":"Смотровые окна","s":"Смотр. окна","o":"mip"},{"k":"fwin","l":"Фальш-окна","s":"Фальш-окна","o":"mip"},{"k":"swin","l":"Смарт-окна","s":"Смарт-окна","o":"mip"},{"k":"cframe","l":"Потолочный каркас","s":"Пот. каркас","o":"mip"},{"k":"cpan","l":"Потолочные панели","s":"Пот. панели","o":"mip"},{"k":"hplf","l":"Стеновой HPL каркас","s":"HPL каркас","o":"mip"},{"k":"hplp","l":"Стеновые HPL панели","s":"HPL панели","o":"mip"},{"k":"dframe","l":"Дверные коробки","s":"Дв. коробки","o":"mip"},{"k":"doors","l":"Двери","s":"Двери","o":"mip"},{"k":"portal","l":"Порталы","s":"Порталы","o":"mip"},{"k":"dauto","l":"Дверная автоматика","s":"Дв. автоматика","o":"mip"},{"k":"cab","l":"Шкаф","s":"Шкаф","o":"mip"},{"k":"cab2","l":"Двойной шкаф","s":"Двойн. шкаф","o":"mip"},{"k":"elec","l":"Электрика","s":"Электрика","o":"mip"},{"k":"light","l":"Светильники","s":"Светильники","o":"mip"},{"k":"eom","l":"Оконечка ЭОМ","s":"Оконечка ЭОМ","o":"mip"},{"k":"tro","l":"ТРО","s":"ТРО","o":"mip"},{"k":"hvac","l":"Воздуховоды","s":"Воздуховоды","o":"mip"},{"k":"tion","l":"Ламинар ТИОН","s":"Ламинар ТИОН","o":"mip"},{"k":"ss","l":"СС","s":"СС","o":"mip"},{"k":"floorf","l":"Заливка пола","s":"Заливка пола","o":"mip"},{"k":"lino","l":"Линолеум","s":"Линолеум","o":"mip"},{"k":"walls","l":"Черновые стены","s":"Черн. стены","o":"mon"},{"k":"screed","l":"Стяжка","s":"Стяжка","o":"mon"},{"k":"vk","l":"ВК","s":"ВК","o":"mon"},{"k":"aspir","l":"Аспирация","s":"Аспирация","o":"mon"},{"k":"heat","l":"Отопление","s":"Отопление","o":"mon"}];
 window.ORGS = { mip: 'МИП-НАНО', mon: 'МОНАРТ' };
 dash.loader('rooms', {
-  description: 'Ячейки листа «Готовность помещений» как строки: первая строка — заголовки, строки без модуля или номера пропущены, площади — числа, ссылка на папку с фото (смарт-чип или гиперссылка) — в колонке photo.',
+  description: 'Ячейки листа «Помещения» (и статусы с листов «МИП-НАНО», «МОНАРТ») как строки: первая строка — заголовки, строки без модуля или номера пропущены, площади — числа, ссылка на папку с фото (смарт-чип или гиперссылка) — в колонке photo.',
   fn: ({ answer }) => {
     const a = typeof answer === 'string' ? JSON.parse(answer) : answer;
     if (a && a.error) throw new Error(a.error.message || String(a.error));
     const grid = (((a && a.sheets) || [])[0] || {}).data || [];
     const rowData = (grid[0] && grid[0].rowData) || [];
-    const cols = ['module','floor','walk_date','room','name','area','norm','perimeter','walls','screed','vk','heat','hvac','aspir','antibac','frame','elec','mip_date','monart_date','comment'];
+    const ST = ['Готово', 'В работе', 'Не готово', 'Не предусмотрено'];
+    const old = rowData.slice(1).some((rd) => ST.includes((((rd && rd.values) || [])[8] || {}).formattedValue));
+    const cols = old ? ['module','floor','walk_date','room','name','area','norm','perimeter','walls','screed','vk','heat','hvac','aspir','antibac','frame','elec','mip_date','monart_date','comment'] : ['module','floor','walk_date','room','name','area','norm','perimeter','mip_date','monart_date','comment'];
     const num = (s) => { if (s == null || s === '') return null; const n = Number(String(s).replace(/\s/g, '').replace(',', '.')); return Number.isFinite(n) ? n : null; };
     const linkOf = (c) => {
       if (!c) return '';

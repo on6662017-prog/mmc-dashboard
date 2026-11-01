@@ -492,6 +492,39 @@ body::before{content:"";position:fixed;inset:-10%;z-index:-1;pointer-events:none
 .rd-row{transition:background .25s,transform .25s}.rd-row:hover{transform:translateX(2px)}
 .rd-row:hover .rd-bar i.r{filter:brightness(1.06)}
 @media (prefers-reduced-motion:reduce){.bf,.rd-bar i::after,.bf::after{animation:none!important}}
+
+/* === v6: выбор раздела — кнопка + нижняя панель === */
+.p-trig{box-sizing:border-box;width:100%;max-width:460px;display:flex;align-items:center;gap:12px;appearance:none;border:1px solid var(--g-br);background:var(--g-bg2);-webkit-backdrop-filter:var(--g-blur);backdrop-filter:var(--g-blur);box-shadow:var(--g-sh);border-radius:20px;padding:14px 18px;font:inherit;color:var(--ink2);cursor:pointer;text-align:left;transition:transform .2s,box-shadow .2s}
+.p-trig:active{transform:scale(.98)}
+.p-trig-l{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut2)}
+.p-trig b{flex:1;font-size:16px;font-weight:600;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.p-trig em{font-style:normal;font-weight:600;font-size:13px;color:#059669;background:rgba(16,185,129,.12);border-radius:99px;padding:3px 9px}
+.p-trig em:empty{display:none}
+.p-trig svg{width:18px;height:18px;fill:none;stroke:var(--mut2);stroke-width:2}
+.p-sheet{position:fixed;inset:0;z-index:100;font-family:"Geist","Inter","SF Pro Text",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
+.p-sheet button{font-family:inherit}
+.p-sh-bg{position:absolute;inset:0;background:rgba(15,23,42,.18);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);opacity:0;transition:opacity .3s}
+.p-sh{position:absolute;left:0;right:0;bottom:0;margin:0 auto;max-width:640px;max-height:82vh;overflow:auto;box-sizing:border-box;padding:8px 16px calc(20px + env(safe-area-inset-bottom));border-radius:28px 28px 0 0;background:rgba(255,255,255,.78);-webkit-backdrop-filter:saturate(180%) blur(30px);backdrop-filter:saturate(180%) blur(30px);border:1px solid rgba(255,255,255,.85);box-shadow:0 -20px 60px -20px rgba(15,23,42,.35);transform:translateY(100%);transition:transform .38s cubic-bezier(.2,.9,.25,1);color:#1b1f27}
+.p-sheet.open .p-sh{transform:none}.p-sheet.open .p-sh-bg{opacity:1}
+.p-sh-grab{width:40px;height:5px;border-radius:99px;background:rgba(15,23,42,.18);margin:4px auto 10px}
+.p-sh-h{display:flex;align-items:center;justify-content:space-between;margin:0 2px 12px}.p-sh-h b{font-size:18px;font-weight:700}
+.p-sh-x{appearance:none;border:0;width:32px;height:32px;border-radius:50%;background:rgba(15,23,42,.06);font-size:14px;color:#475467;cursor:pointer}
+.p-seg{display:grid;grid-template-columns:1fr 1fr;background:rgba(15,23,42,.06);border-radius:14px;padding:3px;margin:12px 0}
+.p-seg button{appearance:none;border:0;background:transparent;border-radius:11px;padding:9px;font:inherit;font-size:14px;font-weight:600;color:#667085;cursor:pointer;transition:background .2s,color .2s}
+.p-seg button.on{background:#fff;color:#1b1f27;box-shadow:0 2px 10px -4px rgba(15,23,42,.3)}
+.p-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px}
+.p-tile{appearance:none;display:flex;flex-direction:column;align-items:flex-start;gap:6px;border:1px solid rgba(255,255,255,.9);background:rgba(255,255,255,.7);border-radius:16px;padding:12px;font:inherit;color:#1b1f27;cursor:pointer;text-align:left;min-height:70px;box-shadow:0 6px 18px -12px rgba(15,23,42,.35);transition:transform .15s,box-shadow .2s;opacity:0;animation:tileIn .35s cubic-bezier(.2,.8,.2,1) forwards}
+.p-tile:nth-child(n){animation-delay:calc(var(--i,0) * 1ms)}
+.p-tile:active{transform:scale(.97)}
+.p-tile span{font-size:14px;font-weight:600;line-height:1.2}
+.p-tile i{font-style:normal;font-size:12px;color:#667085}
+.p-tile u{display:flex;gap:2px;width:100%;height:5px;border-radius:99px;background:rgba(15,23,42,.06);overflow:hidden;margin-top:auto;text-decoration:none}
+.p-tile u s{display:block;height:100%;border-radius:99px;text-decoration:none}.p-tile u s.o{background:var(--bar-ok)}.p-tile u s.w{background:var(--bar-wip)}
+.p-tile.nil span{color:#98a2b3}
+.p-tile.on{border-color:#2f6bff;box-shadow:0 0 0 2px #2f6bff,0 10px 24px -14px rgba(47,107,255,.6);background:#fff}
+.p-all{width:100%;min-height:0;flex-direction:row;align-items:baseline;justify-content:space-between}
+@keyframes tileIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.p-sh,.p-sh-bg{transition:none}.p-tile{animation:none;opacity:1}}
 </style>
 
 <div class="sx">
@@ -1075,9 +1108,30 @@ dash.calc('norm_issues', {
     let ok = 0, ap = 0, wk = 0; SYS.forEach(([k]) => { const s = r[k]; if (s === 'Готово') { ok++; ap++; } else if (s === 'В работе') { wk++; ap++; } else if (s === 'Не готово') ap++; });
     if (!ap) return ['x', 0]; const pc = Math.round(ok / ap * 100); return [pc === 100 ? 'r' : (ok || wk) ? 'w' : 'n', pc];
   };
-  { const og = (o) => '<optgroup label="' + ((window.ORGS || {})[o] || o) + '">' + SYS.filter((x) => x[3] === o).map((x) => '<option value="' + x[0] + '">' + x[1] + '</option>').join('') + '</optgroup>';
-    $('#p-sys').innerHTML = '<label class="p-pick"><span>Раздел</span><select id="p-sel" aria-label="Раздел работ"><option value="all">Общая готовность</option>' + og('mip') + og('mon') + '</select></label>';
-    $('#p-sel').addEventListener('change', (e) => { pSys = e.target.value; renderPlan(); }); }
+  const pPct = (k) => { const B = dash.data('by_system'); if (B.status !== 'ok') return null; const r = B.data.find((x) => x.system === k && x.module === 'Все' && x.floor === 'Все'); return r && r.applicable ? r : null; };
+  let pTab = 'mip';
+  $('#p-sys').innerHTML = '<button type="button" class="p-trig" id="p-trig" aria-haspopup="dialog"><span class="p-trig-l">Раздел</span><b id="p-trig-n">Общая готовность</b><em id="p-trig-v"></em><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>';
+  const sheet = document.createElement('div'); sheet.className = 'p-sheet'; sheet.hidden = true;
+  sheet.innerHTML = '<div class="p-sh-bg" data-x></div><div class="p-sh" role="dialog" aria-label="Раздел работ"><div class="p-sh-grab"></div><div class="p-sh-h"><b>Раздел работ</b><button type="button" class="p-sh-x" data-x aria-label="Закрыть">✕</button></div><button type="button" class="p-tile p-all" data-k="all"><span>Общая готовность</span><i>все работы</i></button><div class="p-seg"><button type="button" data-t="mip">МИП-НАНО</button><button type="button" data-t="mon">МОНАРТ</button></div><div class="p-grid" id="p-grid"></div></div>';
+  document.body.append(sheet);
+  const fillGrid = () => {
+    sheet.querySelectorAll('[data-t]').forEach((b) => b.classList.toggle('on', b.dataset.t === pTab));
+    sheet.querySelector('.p-all').classList.toggle('on', pSys === 'all');
+    const g = sheet.querySelector('#p-grid'); g.replaceChildren();
+    SYS.filter((x) => x[3] === pTab).forEach((x) => { const r = pPct(x[0]); const b = document.createElement('button'); b.type = 'button'; b.className = 'p-tile' + (x[0] === pSys ? ' on' : '') + (r ? '' : ' nil'); b.dataset.k = x[0];
+      const n = document.createElement('span'); n.textContent = x[1]; const v = document.createElement('i'); v.textContent = r ? r.ready_pct + '% готово' : 'нет данных';
+      const bar = document.createElement('u'); if (r) { const a = document.createElement('s'); a.className = 'o'; a.style.width = r.ready_pct + '%'; const w = document.createElement('s'); w.className = 'w'; w.style.width = r.work_pct + '%'; bar.append(a, w); }
+      b.append(n, v, bar); g.append(b); });
+  };
+  const openSheet = () => { const cur = SYS.find((x) => x[0] === pSys); if (cur) pTab = cur[3]; fillGrid(); sheet.hidden = false; requestAnimationFrame(() => sheet.classList.add('open')); document.documentElement.style.overflow = 'hidden'; };
+  const closeSheet = () => { sheet.classList.remove('open'); document.documentElement.style.overflow = ''; setTimeout(() => { sheet.hidden = true; }, 320); };
+  $('#p-trig').addEventListener('click', openSheet);
+  sheet.addEventListener('click', (e) => {
+    if (e.target.closest('[data-x]')) { closeSheet(); return; }
+    const t = e.target.closest('[data-t]'); if (t) { pTab = t.dataset.t; fillGrid(); return; }
+    const k = e.target.closest('[data-k]'); if (k) { pSys = k.dataset.k; renderPlan(); closeSheet(); }
+  });
+  addEventListener('keydown', (e) => { if (e.key === 'Escape' && !sheet.hidden) closeSheet(); });
   $('#p-floors').addEventListener('click', (e) => { const g = e.target.closest('polygon'); if (!g) return; pSel = g.dataset.room; renderPlan(); });
   $('#p-info').addEventListener('click', (e) => { if (e.target.closest('button') && pSel) { const rm = (dash.data('rooms').data || []).find((x) => x.room === pSel); if (rm) pickRoom(rm.room, true); } });
   const pEsc = (v) => String(v).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
@@ -1085,7 +1139,7 @@ dash.calc('norm_issues', {
   const box = $('#p-floors');
   FLOORS.forEach((f) => { const d = mk('div', 'p-fl'); d.id = 'pf-' + f; d.innerHTML = '<div class="p-ft">' + f + ' этаж <small></small></div><div class="sx-planview"><div class="p-wrap"><img alt="План ' + f + ' этажа"><svg class="p-svg" viewBox="0 0 3370 2384" preserveAspectRatio="none" data-f="' + f + '"></svg></div></div>'; box.append(d); });
   function paintPlan() {
-    const ps = $('#p-sel'); if (ps && ps.value !== pSys) ps.value = pSys;
+    { const cur = SYS.find((x) => x[0] === pSys), r = cur && pPct(cur[0]); $('#p-trig-n').textContent = cur ? cur[1] : 'Общая готовность'; $('#p-trig-v').textContent = r ? r.ready_pct + '%' : ''; }
     const R = dash.data('rooms'), rows = R.status === 'ok' ? R.data : [], by = {}; rows.forEach((r) => { by[r.room] = r; });
     const cnt = { r: 0, w: 0, n: 0, x: 0 };
     FLOORS.forEach((f) => {

@@ -645,7 +645,7 @@ dash.loader('rooms', {
     const rowData = (grid[0] && grid[0].rowData) || [];
     const ST = ['Готово', 'В работе', 'Не готово', 'Не предусмотрено'];
     const old = rowData.slice(1).some((rd) => ST.includes((((rd && rd.values) || [])[8] || {}).formattedValue));
-    const cols = old ? ['module','floor','walk_date','room','name','area','norm','perimeter','walls','screed','vk','heat','hvac','aspir','antibac','frame','elec','mip_date','monart_date','comment'] : ['module','floor','walk_date','room','name','area','norm','perimeter','mip_date','monart_date','comment'];
+    const cols = old ? ['module','floor','walk_date','room','name','area','norm','perimeter','walls','screed','vk','heat','hvac','aspir','antibac','frame','elec','mip_date','monart_date','comment'] : ['module','floor','walk_date','room','name','area','norm','perimeter','mip_date','monart_date','comment','dept','cls'];
     const num = (s) => { if (s == null || s === '') return null; const n = Number(String(s).replace(/\s/g, '').replace(',', '.')); return Number.isFinite(n) ? n : null; };
     const linkOf = (c) => {
       if (!c) return '';
@@ -1272,6 +1272,7 @@ dash.calc('norm_issues', {
       c.append(ab);
     }
 
+    if (room.cls || room.dept) { const cl = mk('div', 'sx-area'); cl.append(room.cls ? 'Класс чистоты ' : '', room.cls ? mark(mk('b', '', room.cls), 'rooms', 'cls', W) : '', room.cls && room.dept ? ' · ' : '', room.dept ? mark(mk('span', '', room.dept), 'rooms', 'dept', W) : ''); c.append(cl); }
     const ft = mk('div', 'sx-area'); ft.append('МИП-НАНО: ', mark(mk('span', '', room.mip_date || '—'), 'rooms', 'mip_date', W)); c.append(ft);
     if (room.comment) c.append(mark(mk('div', 'sx-com', room.comment), 'rooms', 'comment', W));
     if (folderOf(room.photo)) {

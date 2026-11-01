@@ -411,10 +411,27 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 .rd-row{grid-template-columns:8.6em 1fr 4.6em}@media (max-width:600px){.rd-row{grid-template-columns:7.6em 1fr 4.4em}}
 
 .sx-ab-l{display:flex;gap:10px;align-items:baseline;margin-top:6px;font-size:13px}.sx-ab-l b{font-weight:600;min-width:7.2em}.sx-ab-l b.rc{color:#e0a3a3}.sx-ab-l b.ex{color:#7cc0f0}.sx-ab-l span{color:rgba(255,255,255,.8);font-variant-numeric:tabular-nums}
+
+.p-sys{overflow:visible;display:block}
+.p-pick{box-sizing:border-box;width:100%;min-width:0;display:flex;align-items:center;gap:10px;background:#111214;color:#fff;border-radius:999px;padding:6px 6px 6px 18px;max-width:420px;position:relative}
+.p-pick span{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.55)}
+.p-pick select{flex:1;min-width:0;width:100%;appearance:none;-webkit-appearance:none;border:0;border-radius:999px;background:#f3efe6 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23111' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 14px center/16px;color:#111214;font:inherit;font-size:15px;font-weight:600;padding:11px 40px 11px 16px;min-height:44px;cursor:pointer}
 </style>
 
 <div class="sx">
   <!-- HERO -->
+  <section class="sx-sec light" id="plan">
+    <div class="sx-h2"><h2>Схема <span id="p-title">этажей 1 · 3 · 6</span></h2>
+      <div class="sx-gtools">
+        <button class="sx-chip" type="button" id="p-out" aria-label="Уменьшить">−</button>
+        <button class="sx-chip" type="button" id="p-in" aria-label="Увеличить">+</button>
+        <a class="sx-btn ghost" id="p-pdf" href="https://drive.google.com/file/d/1nObs-UcYNBBcgMN4H3xQJUelSQhxMZsF/view" target="_blank" rel="noopener noreferrer"><i><svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></i>PDF</a>
+      </div>
+    </div>
+    <p class="sx-gnote">Выберите раздел — помещения МЧП на всех этажах окрасятся по статусу. «+» увеличивает планы.</p>
+    <div class="p-sys" id="p-sys" role="tablist" aria-label="Раздел работ"></div><div class="p-leg" id="p-leg"></div><div class="p-info" id="p-info">Нажмите на помещение на плане.</div><svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><pattern id="p-hatch" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="10" height="10" fill="#fff" fill-opacity=".5"/><line x1="0" y1="0" x2="0" y2="10" stroke="#8a8f94" stroke-width="2"/></pattern></defs></svg><div id="p-floors" data-source="plans"></div>
+  </section>
+
   <section class="sx-sec sx-grid-bg" id="overview">
     <div class="sx-top">
       <div class="sx-brand"><span class="sx-mark"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6"><circle cx="12" cy="12" r="8"/><path d="M12 4v16M4 12h16" stroke-opacity=".45"/><circle cx="12" cy="12" r="3" fill="#fff" stroke="none"/></svg></span>ММЦ Мосфильмовская</div>
@@ -455,17 +472,6 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
   </section>
 
   <!-- PROFILE + ROOM CARD -->
-  <section class="sx-sec light" id="plan">
-    <div class="sx-h2"><h2>Схема <span id="p-title">этажей 1 · 3 · 6</span></h2>
-      <div class="sx-gtools">
-        <button class="sx-chip" type="button" id="p-out" aria-label="Уменьшить">−</button>
-        <button class="sx-chip" type="button" id="p-in" aria-label="Увеличить">+</button>
-        <a class="sx-btn ghost" id="p-pdf" href="https://drive.google.com/file/d/1nObs-UcYNBBcgMN4H3xQJUelSQhxMZsF/view" target="_blank" rel="noopener noreferrer"><i><svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></i>PDF</a>
-      </div>
-    </div>
-    <p class="sx-gnote">Выберите раздел — помещения МЧП на всех этажах окрасятся по статусу. «+» увеличивает планы.</p>
-    <div class="p-sys" id="p-sys" role="tablist" aria-label="Раздел работ"></div><div class="p-leg" id="p-leg"></div><div class="p-info" id="p-info">Нажмите на помещение на плане.</div><svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><pattern id="p-hatch" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="10" height="10" fill="#fff" fill-opacity=".5"/><line x1="0" y1="0" x2="0" y2="10" stroke="#8a8f94" stroke-width="2"/></pattern></defs></svg><div id="p-floors" data-source="plans"></div>
-  </section>
 
   <section class="sx-sec light" id="profile">
     <div class="sx-two">
@@ -991,8 +997,9 @@ dash.calc('norm_issues', {
     let ok = 0, ap = 0, wk = 0; SYS.forEach(([k]) => { const s = r[k]; if (s === 'Готово') { ok++; ap++; } else if (s === 'В работе') { wk++; ap++; } else if (s === 'Не готово') ap++; });
     if (!ap) return ['x', 0]; const pc = Math.round(ok / ap * 100); return [pc === 100 ? 'r' : (ok || wk) ? 'w' : 'n', pc];
   };
-  $('#p-sys').innerHTML = PSYS.map(([k, s]) => '<button type="button" class="sx-chip" data-psys="' + k + '">' + s + '</button>').join('');
-  $('#p-sys').addEventListener('click', (e) => { const b = e.target.closest('[data-psys]'); if (!b) return; pSys = b.dataset.psys; renderPlan(); });
+  { const og = (o) => '<optgroup label="' + ((window.ORGS || {})[o] || o) + '">' + SYS.filter((x) => x[3] === o).map((x) => '<option value="' + x[0] + '">' + x[1] + '</option>').join('') + '</optgroup>';
+    $('#p-sys').innerHTML = '<label class="p-pick"><span>Раздел</span><select id="p-sel" aria-label="Раздел работ"><option value="all">Общая готовность</option>' + og('mip') + og('mon') + '</select></label>';
+    $('#p-sel').addEventListener('change', (e) => { pSys = e.target.value; renderPlan(); }); }
   $('#p-floors').addEventListener('click', (e) => { const g = e.target.closest('polygon'); if (!g) return; pSel = g.dataset.room; renderPlan(); });
   $('#p-info').addEventListener('click', (e) => { if (e.target.closest('button') && pSel) { const rm = (dash.data('rooms').data || []).find((x) => x.room === pSel); if (rm) pickRoom(rm.room, true); } });
   const pEsc = (v) => String(v).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
@@ -1000,7 +1007,7 @@ dash.calc('norm_issues', {
   const box = $('#p-floors');
   FLOORS.forEach((f) => { const d = mk('div', 'p-fl'); d.id = 'pf-' + f; d.innerHTML = '<div class="p-ft">' + f + ' этаж <small></small></div><div class="sx-planview"><div class="p-wrap"><img alt="План ' + f + ' этажа"><svg class="p-svg" viewBox="0 0 3370 2384" preserveAspectRatio="none" data-f="' + f + '"></svg></div></div>'; box.append(d); });
   function paintPlan() {
-    root.querySelectorAll('[data-psys]').forEach((b) => b.classList.toggle('on', b.dataset.psys === pSys));
+    const ps = $('#p-sel'); if (ps && ps.value !== pSys) ps.value = pSys;
     const R = dash.data('rooms'), rows = R.status === 'ok' ? R.data : [], by = {}; rows.forEach((r) => { by[r.room] = r; });
     const cnt = { r: 0, w: 0, n: 0, x: 0 };
     FLOORS.forEach((f) => {

@@ -287,6 +287,7 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 .sx-chip.dk{background:rgba(255,255,255,.08);color:#fff;border-color:rgba(255,255,255,.12)}
 .sx-chip.dk.on{background:#e9eaea;color:#0f1012}
 .sx-planview{position:relative;overflow:auto;-webkit-overflow-scrolling:touch;border-radius:18px;background:#fff;border:1px solid rgba(0,0,0,.06);max-height:min(78vh,900px);touch-action:pan-x pan-y pinch-zoom}
+.sx-floor .sx-floor-t:last-child{white-space:normal!important;flex-wrap:wrap;row-gap:2px}
 #p-wrap{position:relative;width:100%}#p-wrap img{display:block;width:100%;height:auto;max-width:none}
 #p-svg{position:absolute;inset:0;width:100%;height:100%}
 #p-svg polygon{stroke:#111214;stroke-width:1.2;fill-opacity:.62;cursor:pointer;transition:fill .25s,fill-opacity .2s}
@@ -462,6 +463,19 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
   </section>
 
   <!-- FLOORS / SYSTEMS / NORMS -->
+  <section class="sx-sec light" id="plan" hidden>
+    <div class="sx-h2"><h2>План <span id="p-title"></span></h2>
+      <div class="sx-gtools">
+        <button class="sx-chip" type="button" id="p-out" aria-label="Уменьшить">−</button>
+        <button class="sx-chip" type="button" id="p-in" aria-label="Увеличить">+</button>
+        <a class="sx-btn ghost" id="p-pdf" href="https://drive.google.com/file/d/1nObs-UcYNBBcgMN4H3xQJUelSQhxMZsF/view" target="_blank" rel="noopener noreferrer"><i><svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></i>PDF</a>
+        <button class="sx-chip" type="button" id="p-close">Закрыть ×</button>
+      </div>
+    </div>
+    <p class="sx-gnote">Выберите раздел — помещения МЧП окрасятся по статусу. «+» увеличивает план.</p>
+    <div class="p-sys" id="p-sys" role="tablist" aria-label="Раздел работ"></div><div class="p-leg" id="p-leg"></div><div class="p-info" id="p-info">Нажмите на помещение на плане.</div><div class="sx-planview" id="p-view" data-source="plans"><div id="p-wrap"><img id="p-img" alt=""><svg id="p-svg" viewBox="0 0 3370 2384" preserveAspectRatio="none"><defs><pattern id="p-hatch" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="10" height="10" fill="#fff" fill-opacity=".5"/><line x1="0" y1="0" x2="0" y2="10" stroke="#8a8f94" stroke-width="2"/></pattern></defs></svg></div></div>
+  </section>
+
   <section class="sx-sec dark" id="systems">
     <div class="sx-h2"><h2>Этажи <span>и системы</span></h2><span class="sx-lbl" style="color:#7d8285">// нажмите этаж, чтобы отфильтровать</span></div>
     <div class="sx-floors" id="floors" data-source="by_floor"></div>
@@ -492,18 +506,6 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
   </section>
 
   <!-- FLOOR PLAN (on demand) -->
-  <section class="sx-sec light" id="plan" hidden>
-    <div class="sx-h2"><h2>План <span id="p-title"></span></h2>
-      <div class="sx-gtools">
-        <button class="sx-chip" type="button" id="p-out" aria-label="Уменьшить">−</button>
-        <button class="sx-chip" type="button" id="p-in" aria-label="Увеличить">+</button>
-        <a class="sx-btn ghost" id="p-pdf" href="https://drive.google.com/file/d/1nObs-UcYNBBcgMN4H3xQJUelSQhxMZsF/view" target="_blank" rel="noopener noreferrer"><i><svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></i>PDF</a>
-        <button class="sx-chip" type="button" id="p-close">Закрыть ×</button>
-      </div>
-    </div>
-    <p class="sx-gnote">Выберите раздел — помещения МЧП окрасятся по статусу. «+» увеличивает план.</p>
-    <div class="p-sys" id="p-sys" role="tablist" aria-label="Раздел работ"></div><div class="p-leg" id="p-leg"></div><div class="p-info" id="p-info">Нажмите на помещение на плане.</div><div class="sx-planview" id="p-view" data-source="plans"><div id="p-wrap"><img id="p-img" alt=""><svg id="p-svg" viewBox="0 0 3370 2384" preserveAspectRatio="none"><defs><pattern id="p-hatch" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="10" height="10" fill="#fff" fill-opacity=".5"/><line x1="0" y1="0" x2="0" y2="10" stroke="#8a8f94" stroke-width="2"/></pattern></defs></svg></div></div>
-  </section>
 
   <!-- WORKS BY SYSTEM -->
   <section class="sx-sec light" id="works">
@@ -965,14 +967,15 @@ dash.calc('norm_issues', {
     else $('#p-info').textContent = 'Нажмите на помещение на плане.';
   }
   root.querySelectorAll('[data-plan]').forEach((b) => b.addEventListener('click', () => {
-    const f = b.dataset.plan; pZoom = 1; dash.setParams({ plan: P().plan === f ? null : f });
-    if (P().plan) requestAnimationFrame(() => document.getElementById('plan').scrollIntoView({ behavior: 'smooth', block: 'start' }));
+    const f = b.dataset.plan; pZoom = 1; const cur = P().plan || (pClosed ? null : '6'); if (cur === f) pClosed = true; dash.setParams({ plan: cur === f ? null : f });
+    if (cur !== f) requestAnimationFrame(() => document.getElementById('plan').scrollIntoView({ behavior: 'smooth', block: 'start' }));
   }));
   $('#p-in').addEventListener('click', () => { pZoom = Math.min(4, pZoom * 1.5); applyZoom(); });
   $('#p-out').addEventListener('click', () => { pZoom = Math.max(1, pZoom / 1.5); applyZoom(); });
-  $('#p-close').addEventListener('click', () => dash.setParams({ plan: null }));
+  let pClosed = false;
+  $('#p-close').addEventListener('click', () => { pClosed = true; dash.setParams({ plan: null }); });
   function renderPlan() {
-    const f = P().plan, sec = $('#plan');
+    const f = P().plan || (pClosed ? null : '6'), sec = $('#plan');
     root.querySelectorAll('[data-plan]').forEach((b) => b.classList.toggle('on', b.dataset.plan === f));
     if (!f) { sec.hidden = true; return; }
     sec.hidden = false; $('#p-title').textContent = f + ' этажа';

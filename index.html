@@ -548,6 +548,25 @@ html,body{overflow-x:hidden}
 @media (min-width:1100px){#p-floors{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;align-items:start}.p-fl{margin-top:0}}
 @media (min-width:1800px){#p-floors{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media (max-width:400px){.p-trig{padding:12px 14px}.p-trig b{font-size:15px}.p-fleg{font-size:12px}}
+/* === v8: раскладка под все экраны === */
+.sx-three{align-items:start}
+.sx-dialbox.rd{width:100%;box-sizing:border-box}
+@media (min-width:700px){
+ .rd-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:clamp(18px,3vw,40px);border-top:0}
+ .rd-grp{grid-column:1/-1;border-top:1px solid var(--line2)}
+ .rd-row:last-child{border-bottom:1px solid var(--line2)}
+}
+@media (min-width:1100px){
+ .sx-main{grid-template-columns:minmax(260px,320px) minmax(0,1fr)!important;grid-template-rows:auto 1fr;align-items:start!important}
+ .sx-main>#kpis{grid-column:1;grid-row:1}
+ .sx-main>.sx-dialbox{grid-column:2;grid-row:1/span 2;max-width:none;order:0;justify-self:stretch}
+ .sx-main>.sx-col:not(#kpis){grid-column:1;grid-row:2}
+ .sx-main>.sx-col{position:sticky;top:16px}
+}
+@media (min-width:1600px){.rd-list{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (min-width:600px) and (max-width:1099px){.sx-dialbox.rd{max-width:none}}
+@media (min-width:1300px){.sx-sb-list,#sysbars{column-count:2;column-gap:36px}#sysbars>*{break-inside:avoid}}
+.sx-main{align-items:start!important}.sx-dark-tbl td,.sx-dark-tbl td *{color:var(--ink2)!important}.sx-dark-tbl td.bad,.sx-dark-tbl td:last-child{color:#dc2626!important}.sx-dark-tbl th{color:var(--mut2)!important}
 </style>
 
 <div class="sx">

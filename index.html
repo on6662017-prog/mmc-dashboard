@@ -722,6 +722,12 @@ body::before{content:"";position:fixed;inset:-10%;z-index:-1;pointer-events:none
 .sx{padding-top:68px}.sx-sec,#norm-table{scroll-margin-top:84px}
 @media (max-width:600px){.hv-top{top:6px;left:8px;right:8px}.sx{padding-top:58px}.in-frame .hv-top{position:relative!important;top:0;left:0;right:0}.in-frame .sx{padding-top:0}}
 
+.sx-card-h .hv-photo{margin-top:12px!important;height:38px;padding:0 14px 0 6px!important;font-size:13px!important;font-weight:600!important;background:linear-gradient(180deg,#45d6ab,#1fb489)!important;color:#fff!important;border:0!important;box-shadow:0 8px 18px -8px rgba(31,180,137,.8)!important;display:inline-flex!important;align-items:center;gap:8px;width:auto!important;transition:transform .3s var(--hv-ease)}
+.sx-card-h .hv-photo:hover{transform:translateY(-1px)}
+.sx-card-h .hv-photo i{width:28px!important;height:28px!important;border-radius:50%;display:grid!important;place-items:center;background:rgba(255,255,255,.25)!important}
+.sx-card-h .hv-photo i svg{width:15px;height:15px;stroke:#fff!important}
+.hv-nophoto{margin-top:10px!important;color:var(--hv-mut2)!important}
+
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
 <div class="sx">
@@ -1593,7 +1599,7 @@ dash.calc('norm_issues', {
     const ring = mk('div', 'sx-ring');
     if (prog) {
       const R = 32, L = 2 * Math.PI * R;
-      ring.innerHTML = `<svg viewBox="0 0 76 76"><circle cx="38" cy="38" r="${R}" fill="none" stroke="#3a3d41" stroke-width="5"/><circle cx="38" cy="38" r="${R}" fill="none" stroke="${C.wip}" stroke-width="5" stroke-linecap="round" stroke-dasharray="${L * (prog.ready_pct + prog.work_pct) / 100} ${L}"/><circle cx="38" cy="38" r="${R}" fill="none" stroke="${C.ok}" stroke-width="5" stroke-linecap="round" stroke-dasharray="${L * prog.ready_pct / 100} ${L}"/></svg>`;
+      ring.innerHTML = `<svg viewBox="0 0 76 76"><circle cx="38" cy="38" r="${R}" fill="none" stroke="#e6e9e7" stroke-width="5"/><circle cx="38" cy="38" r="${R}" fill="none" stroke="${C.wip}" stroke-width="5" stroke-linecap="round" stroke-dasharray="${L * (prog.ready_pct + prog.work_pct) / 100} ${L}"/><circle cx="38" cy="38" r="${R}" fill="none" stroke="${C.ok}" stroke-width="5" stroke-linecap="round" stroke-dasharray="${L * prog.ready_pct / 100} ${L}"/></svg>`;
       const b = mk('b'); b.append(mark(mk('span', '', prog.ready_pct), 'room_progress', 'ready_pct', W), mk('small', '', '%')); ring.append(b);
     }
     h.append(left, ring); c.append(h);
@@ -1647,8 +1653,8 @@ dash.calc('norm_issues', {
     if (room.comment) c.append(mark(mk('div', 'sx-com', room.comment), 'rooms', 'comment', W));
     if (folderOf(room.photo)) {
       const a = mk('button', 'sx-btn'); a.type = 'button';
-      a.innerHTML = '<i>' + ARROW + '</i>'; a.append('Галерея фото'); a.addEventListener('click', () => openGallery(room)); c.append(a);
-    } else c.append(mk('div', 'sx-area', 'Ссылки на фото нет'));
+      a.className = 'sx-btn hv-photo'; a.innerHTML = '<i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8.5A2.5 2.5 0 0 1 6.5 6h1.7l1.3-2h5l1.3 2h1.7A2.5 2.5 0 0 1 20 8.5v8a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 4 16.5z"/><circle cx="12" cy="12.5" r="3.4"/></svg></i>'; a.append('Фото помещения'); a.addEventListener('click', () => openGallery(room)); left.append(a);
+    } else left.append(mk('div', 'sx-area hv-nophoto', 'Фото нет'));
   }
 
   /* ---- table ---- */

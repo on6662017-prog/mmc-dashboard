@@ -531,6 +531,23 @@ body::before{content:"";position:fixed;inset:-10%;z-index:-1;pointer-events:none
 .p-door{stroke:#fff;stroke-width:7;cursor:pointer;fill:#98a2b3;filter:drop-shadow(0 2px 3px rgba(15,23,42,.35));animation:doorIn .4s cubic-bezier(.2,.8,.2,1) both}
 .p-door.r{fill:#10b981}.p-door.w{fill:#f59e0b}.p-door.n{fill:#ef4444}
 @keyframes doorIn{from{opacity:0;r:0}}
+
+/* === v7: раздел под каждым этажом + адаптив === */
+#p-leg{display:none}
+.p-fctl{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;margin-top:10px}
+.p-fctl .p-trig{flex:1 1 260px;max-width:none}
+.p-fleg{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12.5px;color:var(--mut2)}
+.p-fleg span{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}.p-fleg b{color:var(--ink2);font-weight:600}
+.p-fleg i{width:10px;height:10px;border-radius:3px;display:inline-block}.p-fleg i.r{background:#2f9e5b}.p-fleg i.w{background:#e0a526}.p-fleg i.n{background:#d9493a}.p-fleg i.x{background:repeating-linear-gradient(45deg,#8a8f94 0 2px,#fff 2px 5px)}
+.p-info{position:sticky;top:8px;z-index:4}
+html,body{overflow-x:hidden}
+#dash-root{box-sizing:border-box;width:100%;max-width:min(1680px,100%);padding-left:clamp(8px,2.2vw,28px);padding-right:clamp(8px,2.2vw,28px)}
+.sx-sec{box-sizing:border-box;max-width:100%;padding:clamp(16px,2.6vw,36px)!important}
+.sx img,.sx svg{max-width:100%}
+.sx-planview{max-width:100%}
+@media (min-width:1100px){#p-floors{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;align-items:start}.p-fl{margin-top:0}}
+@media (min-width:1800px){#p-floors{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:400px){.p-trig{padding:12px 14px}.p-trig b{font-size:15px}.p-fleg{font-size:12px}}
 </style>
 
 <div class="sx">
@@ -543,7 +560,7 @@ body::before{content:"";position:fixed;inset:-10%;z-index:-1;pointer-events:none
         <a class="sx-btn ghost" id="p-pdf" href="https://drive.google.com/file/d/1nObs-UcYNBBcgMN4H3xQJUelSQhxMZsF/view" target="_blank" rel="noopener noreferrer"><i><svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></i>PDF</a>
       </div>
     </div>
-    <p class="sx-gnote">Выберите раздел — помещения МЧП на всех этажах окрасятся по статусу. «+» увеличивает планы.</p>
+    <p class="sx-gnote">Раздел выбирается под каждым планом. Нажмите на помещение или дверь — внизу появятся детали.</p>
     <div class="p-sys" id="p-sys" role="tablist" aria-label="Раздел работ"></div><div class="p-leg" id="p-leg"></div><div class="p-info" id="p-info">Нажмите на помещение на плане.</div><svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><pattern id="p-hatch" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="10" height="10" fill="#fff" fill-opacity=".5"/><line x1="0" y1="0" x2="0" y2="10" stroke="#8a8f94" stroke-width="2"/></pattern></defs></svg><div id="p-floors" data-source="plans"></div>
   </section>
 
@@ -1118,15 +1135,15 @@ dash.calc('norm_issues', {
   const PSYS = [['all','Общая','Общая готовность']].concat(SYS.map((x) => [x[0], x[2], x[1]]));
   const PCOL = { r: '#2f9e5b', w: '#e0a526', n: '#d9493a', x: '' };
   const PTXT = { r: 'Готово', w: 'В работе', n: 'Не готово', x: 'Не предусмотрено' };
-  let pSys = 'all', pSel = null;
-  const pState = (r) => {
-    if (pSys !== 'all') { const s = r[pSys]; return s === 'Готово' ? ['r'] : s === 'В работе' ? ['w'] : s === 'Не готово' ? ['n'] : ['x']; }
+  const pSysF = { '1': 'all', '3': 'all', '6': 'all' }; let pSys = 'all', pSel = null, pOpenF = '6';
+  const pState = (r, sys = pSys) => {
+    if (sys !== 'all') { const s = r[sys]; return s === 'Готово' ? ['r'] : s === 'В работе' ? ['w'] : s === 'Не готово' ? ['n'] : ['x']; }
     let ok = 0, ap = 0, wk = 0; SYS.forEach(([k]) => { const s = r[k]; if (s === 'Готово') { ok++; ap++; } else if (s === 'В работе') { wk++; ap++; } else if (s === 'Не готово') ap++; });
     if (!ap) return ['x', 0]; const pc = Math.round(ok / ap * 100); return [pc === 100 ? 'r' : (ok || wk) ? 'w' : 'n', pc];
   };
-  const pPct = (k) => { const B = dash.data('by_system'); if (B.status !== 'ok') return null; const r = B.data.find((x) => x.system === k && x.module === 'Все' && x.floor === 'Все'); return r && r.applicable ? r : null; };
+  const pPct = (k, f = 'Все') => { const B = dash.data('by_system'); if (B.status !== 'ok') return null; const r = B.data.find((x) => x.system === k && x.module === 'Все' && String(x.floor) === String(f)); return r && r.applicable ? r : null; };
   let pTab = 'mip';
-  $('#p-sys').innerHTML = '<button type="button" class="p-trig" id="p-trig" aria-haspopup="dialog"><span class="p-trig-l">Раздел</span><b id="p-trig-n">Общая готовность</b><em id="p-trig-v"></em><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>';
+  $('#p-sys').innerHTML = '';
   const sheet = document.createElement('div'); sheet.className = 'p-sheet'; sheet.hidden = true;
   sheet.innerHTML = '<div class="p-sh-bg" data-x></div><div class="p-sh" role="dialog" aria-label="Раздел работ"><div class="p-sh-grab"></div><div class="p-sh-h"><b>Раздел работ</b><button type="button" class="p-sh-x" data-x aria-label="Закрыть">✕</button></div><button type="button" class="p-tile p-all" data-k="all"><span>Общая готовность</span><i>все работы</i></button><div class="p-seg"><button type="button" data-t="mip">МИП-НАНО</button><button type="button" data-t="mon">МОНАРТ</button></div><div class="p-grid" id="p-grid"></div></div>';
   document.body.append(sheet);
@@ -1134,54 +1151,57 @@ dash.calc('norm_issues', {
     sheet.querySelectorAll('[data-t]').forEach((b) => b.classList.toggle('on', b.dataset.t === pTab));
     sheet.querySelector('.p-all').classList.toggle('on', pSys === 'all');
     const g = sheet.querySelector('#p-grid'); g.replaceChildren();
-    SYS.filter((x) => x[3] === pTab).forEach((x) => { const r = pPct(x[0]); const b = document.createElement('button'); b.type = 'button'; b.className = 'p-tile' + (x[0] === pSys ? ' on' : '') + (r ? '' : ' nil'); b.dataset.k = x[0];
+    SYS.filter((x) => x[3] === pTab).forEach((x) => { const r = pPct(x[0], pOpenF); const b = document.createElement('button'); b.type = 'button'; b.className = 'p-tile' + (x[0] === pSys ? ' on' : '') + (r ? '' : ' nil'); b.dataset.k = x[0];
       const n = document.createElement('span'); n.textContent = x[1]; const v = document.createElement('i'); v.textContent = r ? r.ready_pct + '% готово' : 'нет данных';
       const bar = document.createElement('u'); if (r) { const a = document.createElement('s'); a.className = 'o'; a.style.width = r.ready_pct + '%'; const w = document.createElement('s'); w.className = 'w'; w.style.width = r.work_pct + '%'; bar.append(a, w); }
       b.append(n, v, bar); g.append(b); });
   };
-  const openSheet = () => { const cur = SYS.find((x) => x[0] === pSys); if (cur) pTab = cur[3]; fillGrid(); sheet.hidden = false; requestAnimationFrame(() => sheet.classList.add('open')); document.documentElement.style.overflow = 'hidden'; };
+  const openSheet = () => { pSys = pSysF[pOpenF]; sheet.querySelector('.p-sh-h b').textContent = 'Раздел · ' + pOpenF + ' этаж'; const cur = SYS.find((x) => x[0] === pSys); if (cur) pTab = cur[3]; fillGrid(); sheet.hidden = false; requestAnimationFrame(() => sheet.classList.add('open')); document.documentElement.style.overflow = 'hidden'; };
   const closeSheet = () => { sheet.classList.remove('open'); document.documentElement.style.overflow = ''; setTimeout(() => { sheet.hidden = true; }, 320); };
-  $('#p-trig').addEventListener('click', openSheet);
   sheet.addEventListener('click', (e) => {
     if (e.target.closest('[data-x]')) { closeSheet(); return; }
     const t = e.target.closest('[data-t]'); if (t) { pTab = t.dataset.t; fillGrid(); return; }
-    const k = e.target.closest('[data-k]'); if (k) { pSys = k.dataset.k; renderPlan(); closeSheet(); }
+    const k = e.target.closest('[data-k]'); if (k) { pSysF[pOpenF] = k.dataset.k; renderPlan(); closeSheet(); }
   });
   addEventListener('keydown', (e) => { if (e.key === 'Escape' && !sheet.hidden) closeSheet(); });
   $('#p-floors').addEventListener('click', (e) => {
+    const tg = e.target.closest('.p-trig'); if (tg) { pOpenF = tg.dataset.f; openSheet(); return; }
     const dc = e.target.closest('.p-door'); if (dc) { const d = (dash.data('doors').data || []).find((x) => String(x.n) === dc.dataset.door); if (d) $('#p-info').innerHTML = '<b>' + pEsc(d.mark) + '</b> · ' + pEsc(d.span) + ' — ' + pEsc((d.wn || d.w) + '×' + (parseInt(d.h) || d.h)) + ', ' + pEsc(d.open) + ', ' + pEsc(d.drive) + ' — <b>' + pEsc(d.status || 'статус не указан') + '</b>'; return; }
     const g = e.target.closest('polygon'); if (!g) return; pSel = g.dataset.room; renderPlan(); });
   $('#p-info').addEventListener('click', (e) => { if (e.target.closest('button') && pSel) { const rm = (dash.data('rooms').data || []).find((x) => x.room === pSel); if (rm) pickRoom(rm.room, true); } });
   const pEsc = (v) => String(v).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
   const SVGNS = 'http://www.w3.org/2000/svg';
   const box = $('#p-floors');
-  FLOORS.forEach((f) => { const d = mk('div', 'p-fl'); d.id = 'pf-' + f; d.innerHTML = '<div class="p-ft">' + f + ' этаж <small></small></div><div class="sx-planview"><div class="p-wrap"><img alt="План ' + f + ' этажа"><svg class="p-svg" viewBox="0 0 3370 2384" preserveAspectRatio="none" data-f="' + f + '"></svg></div></div>'; box.append(d); });
+  FLOORS.forEach((f) => { const d = mk('div', 'p-fl'); d.id = 'pf-' + f; d.innerHTML = '<div class="p-ft">' + f + ' этаж <small></small></div><div class="sx-planview"><div class="p-wrap"><img alt="План ' + f + ' этажа"><svg class="p-svg" viewBox="0 0 3370 2384" preserveAspectRatio="none" data-f="' + f + '"></svg></div></div><div class="p-fctl"><button type="button" class="p-trig" data-f="' + f + '" aria-haspopup="dialog"><span class="p-trig-l">Раздел</span><b class="p-trig-n">Общая готовность</b><em class="p-trig-v"></em><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button><div class="p-fleg"></div></div>'; box.append(d); });
   const DPOS = {"1":["1",747,1682],"2":["1",645,1714],"3":["1",648,1719],"4":["1",758,1696],"5":["1",751,1654],"6":["1",835,1597],"7":["1",793,1571],"9":["1",1241,1372],"10":["1",1300,1430],"12":["3",707,1557],"13":["3",752,1579],"14":["3",773,1490],"15":["3",808,1554],"16":["3",1670,1098],"17":["3",1734,1138],"18":["3",1708,1178],"19":["3",1766,1196],"20":["3",1791,826],"21":["3",1782,834],"22":["3",1815,883],"23":["3",1819,826],"24":["3",1889,842],"25":["6",317,1758],"26":["6",412,1698],"27":["6",509,1635],"28":["6",572,1663],"29":["6",598,1753],"30":["6",596,1923],"31":["6",611,1893],"32":["6",666,2035],"33":["6",663,1971],"34":["6",620,1737],"35":["6",660,1713],"36":["6",700,1687],"37":["6",758,1649],"38":["6",797,1624],"39":["6",820,1609],"40":["6",874,1574],"41":["6",919,1534],"42":["6",912,1513],"43":["6",589,1653],"44":["6",771,1570],"45":["6",792,1556],"46":["6",662,1541],"47":["6",704,1517],"48":["6",695,1602],"49":["6",800,1452],"50":["6",834,1423],"51":["6",835,1512],"52":["6",982,1989],"53":["6",1029,1989],"54":["6",996,1955],"55":["6",1071,1950],"56":["6",1133,1989],"57":["6",1176,1989],"58":["6",1124,1936],"59":["6",1173,1949],"60":["6",1299,1989],"61":["6",1344,1989],"62":["6",1258,1955],"63":["6",1406,1944],"64":["6",1486,1989],"65":["6",1541,1989],"66":["6",1490,1949],"67":["6",1544,1940],"68":["6",2365,1793],"69":["6",1528,1022],"70":["6",1645,940],"71":["6",1667,912],"72":["6",1731,867],"73":["6",1720,916],"74":["6",1830,802],"75":["6",1849,806],"76":["6",1879,774],"77":["6",1946,730],"78":["6",2009,686],"79":["6",1992,721],"80":["6",2111,620],"81":["6",2162,591],"82":["6",2140,642],"83":["6",1872,1004],"84":["6",1911,975],"85":["6",1824,959],"86":["6",1948,937],"87":["6",1948,937],"88":["6",2089,900],"89":["6",2199,759],"90":["6",2064,846],"91":["6",2073,898],"92":["6",2132,784],"93":["6",2073,842],"94":["6",2217,729],"95":["6",2198,758],"96":["6",2254,798],"97":["6",1637,1027],"98":["6",2017,961],"99":["6",1738,1012],"100":["6",1745,1008],"101":["6",1738,1012],"102":["6",1763,995],"103":["6",2324,597],"104":["6",2382,605],"105":["6",2191,582],"106":["6",2291,652],"107":["6",572,1663],"108":["6",919,1541]};
   const DOORK = ['doors', 'sldoor', 'dframe', 'dauto', 'sdoor', 'portal'];
   function paintPlan() {
-    { const cur = SYS.find((x) => x[0] === pSys), r = cur && pPct(cur[0]); $('#p-trig-n').textContent = cur ? cur[1] : 'Общая готовность'; $('#p-trig-v').textContent = r ? r.ready_pct + '%' : ''; }
+    const LBL = { r: 'Готово', w: 'В работе', n: 'Не готово', x: 'Нет работ' }, LBLA = { r: 'Всё готово', w: 'Частично', n: 'Не начато', x: 'Нет работ' };
     const R = dash.data('rooms'), rows = R.status === 'ok' ? R.data : [], by = {}; rows.forEach((r) => { by[r.room] = r; });
     const cnt = { r: 0, w: 0, n: 0, x: 0 };
     FLOORS.forEach((f) => {
+      const sys = pSysF[f], fl = box.querySelector('#pf-' + f);
+      { const cur = SYS.find((x) => x[0] === sys), r = cur && pPct(cur[0], f); fl.querySelector('.p-trig-n').textContent = cur ? cur[1] : 'Общая готовность'; fl.querySelector('.p-trig-v').textContent = r ? r.ready_pct + '%' : ''; }
       const svg = box.querySelector('svg[data-f="' + f + '"]'); svg.querySelectorAll('polygon').forEach((n) => n.remove());
       const c = { r: 0, w: 0, n: 0, x: 0 };
       Object.entries(PGEO).forEach(([code, g]) => {
-        if (g[0] !== f) return; const r = by[code]; if (!r) return; const [k] = pState(r); cnt[k]++; c[k]++;
+        if (g[0] !== f) return; const r = by[code]; if (!r) return; const [k] = pState(r, sys); cnt[k]++; c[k]++;
         const pg = document.createElementNS(SVGNS, 'polygon'); pg.setAttribute('points', g[1]); pg.dataset.room = code;
         if (k === 'x') pg.setAttribute('class', 'x'); else pg.style.fill = PCOL[k]; if (code === pSel) pg.classList.add('sel');
         const t = document.createElementNS(SVGNS, 'title'); t.textContent = code + ' ' + (r.name || ''); pg.append(t); svg.append(pg);
       });
       svg.querySelectorAll('.p-door').forEach((n) => n.remove());
-      if (DOORK.includes(pSys)) { const DD = dash.data('doors'); (DD.status === 'ok' ? DD.data : []).forEach((d) => { const q = DPOS[d.n]; if (!q || q[0] !== f) return;
+      if (DOORK.includes(sys)) { const DD = dash.data('doors'); (DD.status === 'ok' ? DD.data : []).forEach((d) => { const q = DPOS[d.n]; if (!q || q[0] !== f) return;
         const st = d.status === 'Готово' ? 'r' : d.status === 'В работе' ? 'w' : d.status === 'Не готово' ? 'n' : 'x';
         const g = document.createElementNS(SVGNS, 'circle'); g.setAttribute('cx', q[1]); g.setAttribute('cy', q[2]); g.setAttribute('r', 26); g.setAttribute('class', 'p-door ' + st); g.dataset.door = d.n;
         const t = document.createElementNS(SVGNS, 'title'); t.textContent = d.mark + ' · ' + d.span; g.append(t); svg.append(g); }); }
-      box.querySelector('#pf-' + f + ' small').textContent = (c.r + c.w + c.n + c.x) ? 'готово ' + c.r + ' · в работе ' + c.w + ' · не готово ' + c.n + (c.x ? ' · нет работ ' + c.x : '') : '';
+      fl.querySelector('small').textContent = '';
+      fl.querySelector('.p-fleg').innerHTML = ['r', 'w', 'n', 'x'].filter((k) => c[k] || k !== 'x').map((k) => '<span><i class="' + k + '"></i>' + (sys === 'all' ? LBLA : LBL)[k] + ' <b>' + c[k] + '</b></span>').join('');
     });
-    const name = PSYS.find((x) => x[0] === pSys)[2];
+    const pf = pSel && PGEO[pSel] ? PGEO[pSel][0] : '6', psys = pSysF[pf], name = PSYS.find((x) => x[0] === psys)[2];
     $('#p-leg').innerHTML = '<span style="color:var(--ink);font-weight:600">' + pEsc(name) + ':</span>' + ['r', 'w', 'n', 'x'].filter((k) => cnt[k] || k !== 'x').map((k) => '<span><i style="background:' + (PCOL[k] || 'repeating-linear-gradient(45deg,#8a8f94 0 2px,#fff 2px 5px)') + '"></i>' + (pSys === 'all' ? { r: 'Всё готово', w: 'Частично', n: 'Не начато', x: 'Нет работ' }[k] : PTXT[k]) + ' · ' + cnt[k] + '</span>').join('');
     const r = pSel && by[pSel];
-    if (r && PGEO[pSel]) { const [k, pc] = pState(r); $('#p-info').innerHTML = '<b>' + pEsc(r.room) + '</b> · ' + pEsc(r.name || '') + ' — ' + (pSys === 'all' ? 'готово ' + pc + '%' : pEsc(name) + ': ' + PTXT[k]) + '<button type="button">Карточка</button>'; }
+    if (r && PGEO[pSel]) { const [k, pc] = pState(r, psys); $('#p-info').innerHTML = '<b>' + pEsc(r.room) + '</b> · ' + pEsc(r.name || '') + ' — ' + (psys === 'all' ? 'готово ' + pc + '%' : pEsc(name) + ': ' + PTXT[k]) + '<button type="button">Карточка</button>'; }
     else $('#p-info').textContent = 'Нажмите на помещение на плане.';
   }
   root.querySelectorAll('[data-plan]').forEach((b) => b.addEventListener('click', () => { const el = document.getElementById('pf-' + b.dataset.plan); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }));

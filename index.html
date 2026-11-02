@@ -728,6 +728,111 @@ body::before{content:"";position:fixed;inset:-10%;z-index:-1;pointer-events:none
 .sx-card-h .hv-photo i svg{width:15px;height:15px;stroke:#fff!important}
 .hv-nophoto{margin-top:10px!important;color:var(--hv-mut2)!important}
 
+
+
+/*v10*//* ===== v10 · тёмное тёплое стекло (как на референсах) ===== */
+:root,#dash-root .sx{--hv-bg:#17140f;--hv-ink:#f3efe8;--hv-mut:rgba(243,239,232,.58);--hv-mut2:rgba(243,239,232,.38);--hv-line:rgba(255,255,255,.08);--hv-card:rgba(46,41,35,.52);--hv-card2:rgba(58,52,45,.62);--hv-br:rgba(255,255,255,.09);--hv-sh:inset 0 1px 0 rgba(255,255,255,.07),0 24px 48px -28px rgba(0,0,0,.75);--hv-mint:#5ad6ae;--hv-mint-d:#5ad6ae;--hv-mint-bg:rgba(90,214,174,.14);--hv-amb:#e9b45c;--hv-amb-bg:rgba(233,180,92,.14);
+--g-bg:rgba(36,32,27,.42);--g-bg2:var(--hv-card);--g-br:var(--hv-br);--g-sh:var(--hv-sh);--g-blur:saturate(140%) blur(24px);--ink2:var(--hv-ink);--mut2:var(--hv-mut);--acc:var(--hv-mint);--line2:var(--hv-line);
+--ink:var(--hv-ink);--mut:var(--hv-mut);--bg:#1d1a16;--bg2:#24201b;--glass:var(--hv-card);--glass-b:var(--hv-br);--dk:#2a2620;--dk2:#211d18;--line:var(--hv-line);
+--bar-ok:linear-gradient(90deg,#2f9c7d 0%,#5ad6ae 100%);--bar-wip:linear-gradient(90deg,#a87a33 0%,#e9b45c 100%);--bar-nr:rgba(255,255,255,.07)}
+html,body{background:#17140f!important;color-scheme:dark}
+body::before{inset:-12%!important;filter:blur(28px)!important;background:
+ radial-gradient(30% 36% at 18% 6%,rgba(214,170,110,.30),transparent 70%),
+ radial-gradient(26% 40% at 58% 0%,rgba(240,214,170,.18),transparent 70%),
+ radial-gradient(36% 46% at 92% 22%,rgba(150,120,80,.30),transparent 72%),
+ radial-gradient(40% 44% at 30% 60%,rgba(92,96,64,.30),transparent 70%),
+ radial-gradient(50% 50% at 82% 88%,rgba(110,76,48,.36),transparent 72%),
+ radial-gradient(60% 50% at 10% 96%,rgba(60,52,40,.6),transparent 70%),
+ linear-gradient(180deg,#2a241c 0%,#1a1611 55%,#13110d 100%)!important}
+body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(120% 90% at 50% 30%,transparent 40%,rgba(0,0,0,.55) 100%)}
+#dash-root,#dash-root .sx{color:var(--hv-ink)!important}
+
+/* поверхности */
+.sx-sec,.sx-sec.light,.sx-sec.dark,.sx-sec#overview,.sx-sec#profile,.sx-sec#works{background:rgba(30,27,23,.38)!important;border:1px solid rgba(255,255,255,.06)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 30px 60px -40px rgba(0,0,0,.8)!important;color:var(--hv-ink)!important}
+.sx-glass,.sx-mod,.sx-kpi,.sx-types,.sx-dark-tbl,.sx-sec.dark .sx-glass,.sx-floor,.sx-card,.sx-dialbox.rd,.hv-card,.sx-wk,.sx-take,.sx-pdf,.sx-planview,.sx-tip,.p-sh,.p-tile,.hv-sugg{background:var(--hv-card)!important;border-color:var(--hv-br)!important;color:var(--hv-ink)!important}
+.sx-rc,.sx-floor{background:rgba(255,255,255,.045)!important;border:1px solid var(--hv-br)!important;box-shadow:none!important;color:var(--hv-ink)!important}
+.sx-rc:hover,.sx-ty:hover,.rd-row:hover,.sx-sb:hover,.sx-pdf:hover,.sx-tbl tbody tr:hover{background:rgba(255,255,255,.07)!important}
+.sx-rc.on,.sx-floor.on,.sx-mod.on,.sx-ty.on,.sx-sb.on,.sx-tbl tbody tr.sel,.p-tile.on{background:rgba(90,214,174,.12)!important;border-color:rgba(90,214,174,.4)!important}
+.sx-rc-name,.sx-rc-p small,.sx-lbl,.sx-note,.sx-gnote,.sx-room-m,.sx-area,.sx-kpi-l,.sx-count,.sx-rg-h small,.rd-grp,.rd-leg,.sx-dial-s,.sx-dial-w{color:var(--hv-mut)!important}
+.sx-h2 h2,.sx-room,.sx-room-n,.sx-rc-n,.sx-rc-p,.sx-kpi-v,.sx-rg-h,.rd-grp b,.rd-row.on .rd-n,.sx-ring b{color:var(--hv-ink)!important}
+.sx-h2 h2 span{color:var(--hv-mut2)!important}
+.sx-planview{background:#f4f1ea!important;border-radius:18px!important;overflow:hidden}
+.p-wrap img{filter:saturate(.9) brightness(.97)}
+
+/* кнопки, чипы, сегменты */
+.sx-btn,.sx-card .sx-btn,.sx-lb .sx-btn{background:rgba(255,255,255,.08)!important;color:var(--hv-ink)!important;border:1px solid var(--hv-br)!important;box-shadow:none!important}
+.sx-btn i{background:rgba(255,255,255,.1)!important}.sx-btn i svg{stroke:var(--hv-ink)!important}
+.sx-btn.ghost,#p-pdf,.sx-chip,.sx-pill,.sx-search,.sx-chip.dk{background:rgba(255,255,255,.07)!important;color:var(--hv-ink)!important;border:1px solid var(--hv-br)!important}
+#p-pdf i{background:var(--hv-mint-bg)!important}#p-pdf i svg{stroke:var(--hv-mint)!important}
+.sx-seg,.p-seg{background:rgba(0,0,0,.22)!important;border:1px solid var(--hv-br)!important}
+.sx-seg button,.p-seg button{color:var(--hv-mut)!important;background:transparent!important}
+.sx-seg button[aria-pressed=true],.sx-pill[aria-pressed=true],.sx-chip.dk.on,.p-seg button.on{background:var(--hv-mint)!important;color:#0f2a21!important;box-shadow:0 6px 16px -8px rgba(90,214,174,.7)!important}
+.sx-search input,.p-pick select{color:var(--hv-ink)!important;background-color:rgba(255,255,255,.07)!important}
+
+/* таблицы */
+.sx-tbl,.sx-tbl td,.sx-tbl th{color:var(--hv-ink)!important;border-color:var(--hv-line)!important}
+.sx-tbl th{background:rgba(255,255,255,.05)!important;color:var(--hv-mut)!important}
+.sx-tbl th.hl,.sx-tbl td.hl{background:rgba(90,214,174,.08)!important}
+.sx-dark-tbl td,.sx-dark-tbl td *{color:var(--hv-ink)!important}
+
+/* полосы */
+.rd-bar,.sx-bar,.sx-area-bar{background:rgba(255,255,255,.07)!important}
+.rd-bar i.w,.rd-leg i.w,.sx-dr-l i.dot.w,.p-fleg i.w{background:var(--hv-amb)!important}
+.sx-dr-l i.dot.n{background:rgba(255,255,255,.25)!important}
+.sx-area-bar em{background:rgba(255,255,255,.12)!important}
+svg circle[stroke="#e6e9e7"]{stroke:rgba(255,255,255,.1)}
+
+/* верхняя панель */
+.hv-top{background:rgba(34,30,25,.58)!important;border-color:rgba(255,255,255,.08)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 18px 40px -20px rgba(0,0,0,.8)!important}
+.hv-brand small{color:var(--hv-mut)}
+.hv-logo{background:linear-gradient(145deg,#7ee6c4,#3cbf97)!important;box-shadow:0 6px 18px -6px rgba(90,214,174,.6),inset 0 1px 0 rgba(255,255,255,.4)!important}
+.hv-logo svg{stroke:#0f2a21}
+.hv-nav{background:rgba(0,0,0,.22)!important;border-color:rgba(255,255,255,.06)!important}
+.hv-nav button{color:var(--hv-mut)!important}.hv-nav button:hover,.hv-nav button.on{color:var(--hv-ink)!important}
+.hv-pill{background:rgba(255,255,255,.12)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.12)!important}
+.hv-search,.hv-ic,.hv-ki,.hv-ch a,.hv-ch button,.hv-orgs span,.hv-tile{background:rgba(255,255,255,.06)!important;border-color:var(--hv-br)!important;color:var(--hv-ink)!important}
+.hv-search input{color:var(--hv-ink)!important}.hv-search input::placeholder{color:var(--hv-mut2)}
+.hv-search kbd{background:rgba(255,255,255,.08)!important;border-color:var(--hv-br)!important;color:var(--hv-mut)!important}
+.hv-search:focus-within{box-shadow:0 0 0 4px rgba(90,214,174,.16)!important}
+.hv-sugg{background:rgba(38,34,29,.96)!important}.hv-sugg button{color:var(--hv-ink)!important}
+.hv-tile:hover{background:rgba(255,255,255,.1)!important}
+.hv-ki svg,.hv-search svg{stroke:var(--hv-ink)!important}
+.hv-act #refresh,.sx-card-h .hv-photo{background:linear-gradient(180deg,#7ee6c4,#4ccda4)!important;color:#0f2a21!important;box-shadow:0 8px 22px -10px rgba(90,214,174,.75)!important}
+.hv-act #refresh i,.sx-card-h .hv-photo i{background:rgba(15,42,33,.12)!important}
+.hv-act #refresh i svg,.sx-card-h .hv-photo i svg{stroke:#0f2a21!important}
+.hv-walk b{background:rgba(90,214,174,.14)!important;color:var(--hv-mint)!important}
+.hv-tile{--t:rgba(255,255,255,.08)}
+.hv-tile i{background:color-mix(in srgb,var(--tc) 22%,transparent)!important}
+.hv-tile i svg{stroke:color-mix(in srgb,var(--tc) 55%,#fff)!important}
+.hv-dn .bg{stroke:rgba(255,255,255,.07)!important}
+.hv-lg i[style*="#dfe3e1"]{background:rgba(255,255,255,.25)!important}
+#hvgOk stop:first-child{stop-color:#2f9c7d}#hvgOk stop:last-child{stop-color:#7ee6c4}
+#hvgWip stop:first-child{stop-color:#a87a33}#hvgWip stop:last-child{stop-color:#f0c374}
+#kpis.hv-kpis .sx-kpi .sx-kpi-v{color:var(--hv-ink)!important}
+@media (max-width:600px){#kpis.hv-kpis .sx-kpi{background:rgba(255,255,255,.05)!important}}
+
+/* нижняя панель на телефоне */
+.sx-tabbar{background:rgba(34,30,25,.72)!important;border-color:rgba(255,255,255,.08)!important;box-shadow:0 18px 40px -16px rgba(0,0,0,.8)!important}
+.sx-tabbar button{color:var(--hv-mut)!important}.sx-tabbar button[aria-current=true]{color:var(--hv-mint)!important}
+.sx-tabbar .hv-pill{background:rgba(90,214,174,.14)!important;box-shadow:none!important}
+
+/* подсказка, нижний лист выбора раздела */
+.sx-tip{background:rgba(20,18,15,.92)!important;color:var(--hv-ink)!important}
+.p-sh{background:rgba(32,28,24,.96)!important}
+.p-tile{background:rgba(255,255,255,.05)!important;color:var(--hv-ink)!important}
+.p-trig{background:rgba(255,255,255,.06)!important;color:var(--hv-ink)!important;border:1px solid var(--hv-br)!important}
+.p-trig-l,.p-fleg,.p-ft small{color:var(--hv-mut)!important}
+.p-trig-n,.p-ft{color:var(--hv-ink)!important}
+.p-trig svg{stroke:var(--hv-ink)!important}
+.rd-n,.rd-row.on .rd-n{color:var(--hv-ink)!important}
+.rd-row.nil .rd-n{color:var(--hv-mut2)!important}
+.rd-v,.rd-v b,.rd-v span{color:var(--hv-ink)!important}
+.rd-v small{color:var(--hv-amb)!important}.rd-v small.nd{color:var(--hv-mut2)!important}
+.sx-take b,.sx-take strong{color:var(--hv-ink)!important}.sx-take{color:var(--hv-mut)!important}
+.sx-st,.sx-panel .sx-st,.sx-st.n{color:var(--hv-ink)!important}
+.sx-st.x{color:var(--hv-mut2)!important}.sx-st.x::before{border-color:rgba(255,255,255,.25)!important}
+.sx-st.n::before{background:rgba(255,255,255,.35)!important}
+/*v10end*/
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
 <div class="sx">

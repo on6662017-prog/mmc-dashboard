@@ -376,8 +376,10 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 @media (max-width:600px){.sx-sec{border-radius:24px}.sx-take{border-radius:20px}}
 .sx-gal-sec::after{display:none}
 #g-live{position:relative;z-index:6}
-#g-live:has(> iframe){isolation:isolate;overflow:hidden;border-radius:18px;background:linear-gradient(145deg,#f4ecdf,#e3d6c5);box-shadow:0 12px 32px rgba(26,18,12,.18)}
+#g-live:has(> iframe),.sx-room-photos{isolation:isolate;overflow:hidden;border-radius:18px;background:linear-gradient(145deg,#f4ecdf,#e3d6c5);box-shadow:0 12px 32px rgba(26,18,12,.18)}
 #g-live iframe{min-height:420px;mix-blend-mode:multiply}
+.sx-room-photos{margin-top:14px}
+.sx-room-photos iframe{display:block;width:100%;height:clamp(220px,36vh,340px);border:0;background:#fff;mix-blend-mode:multiply}
 @media (max-width:600px){.in-frame .sx-tabbar{position:absolute;top:8px;bottom:auto}.in-frame #dash-root{padding-top:84px}}
 
 /* === v3: блок готовности + анимации === */
@@ -1813,7 +1815,11 @@ dash.calc('norm_issues', {
     if (room.cls || room.dept) { const cl = mk('div', 'sx-area'); cl.append(room.cls ? 'Класс чистоты ' : '', room.cls ? mark(mk('b', '', room.cls), 'rooms', 'cls', W) : '', room.cls && room.dept ? ' · ' : '', room.dept ? mark(mk('span', '', room.dept), 'rooms', 'dept', W) : ''); c.append(cl); }
     const ft = mk('div', 'sx-area'); ft.append('МИП-НАНО: ', mark(mk('span', '', room.mip_date || '—'), 'rooms', 'mip_date', W)); c.append(ft);
     if (room.comment) c.append(mark(mk('div', 'sx-com', room.comment), 'rooms', 'comment', W));
-    if (folderOf(room.photo)) {
+    const photoFolder = folderOf(room.photo);
+    if (photoFolder) {
+      const photos = mk('div', 'sx-room-photos');
+      iframeGal(photos, photoFolder);
+      h.after(photos);
       const a = mk('button', 'sx-btn'); a.type = 'button';
       a.className = 'sx-btn hv-photo'; a.innerHTML = '<i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8.5A2.5 2.5 0 0 1 6.5 6h1.7l1.3-2h5l1.3 2h1.7A2.5 2.5 0 0 1 20 8.5v8a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 4 16.5z"/><circle cx="12" cy="12.5" r="3.4"/></svg></i>'; a.append('Фото помещения'); a.addEventListener('click', () => openGallery(room)); left.append(a);
     } else left.append(mk('div', 'sx-area hv-nophoto', 'Фото нет'));

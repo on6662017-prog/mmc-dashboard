@@ -376,7 +376,8 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 @media (max-width:600px){.sx-sec{border-radius:24px}.sx-take{border-radius:20px}}
 .sx-gal-sec::after{display:none}
 #g-live{position:relative;z-index:6}
-#g-live iframe{background:#fff;min-height:420px}
+#g-live:has(> iframe){isolation:isolate;overflow:hidden;border-radius:18px;background:linear-gradient(145deg,#f4ecdf,#e3d6c5);box-shadow:0 12px 32px rgba(26,18,12,.18)}
+#g-live iframe{min-height:420px;mix-blend-mode:multiply}
 @media (max-width:600px){.in-frame .sx-tabbar{position:absolute;top:8px;bottom:auto}.in-frame #dash-root{padding-top:84px}}
 
 /* === v3: блок готовности + анимации === */

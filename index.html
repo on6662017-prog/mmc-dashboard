@@ -11,6 +11,7 @@
 #g-live .gl-sk{aspect-ratio:4/3;border-radius:14px;background:linear-gradient(90deg,#e4e5e4,#eef0ef,#e4e5e4);background-size:200% 100%;animation:glsk 1.2s infinite linear}
 @keyframes glsk{to{background-position:-200% 0}}
 @media (max-width:520px){#g-live .gl-grid{grid-template-columns:1fr 1fr}}
+.hv-sync{font-size:12px;opacity:.7;margin-top:6px}
 </style></head><body><div id="dash-root"><style>
 .sx svg text{font-family:inherit}
 .sx{--bg:#d6d8d7;--bg2:#e4e5e4;--ink:#1b1d1f;--mut:#7c8083;--glass:rgba(255,255,255,.34);--glass-b:rgba(255,255,255,.55);--dk:#27292c;--dk2:#1e2023;--ok:#7fa88f;--wip:#c4ab82;--bad:#e5472d;--nr:#4a4e52;font-family:"Geist","Inter Display","Inter","SF Pro Display",-apple-system,BlinkMacSystemFont,"Segoe UI Variable Display","Segoe UI Variable Text","Segoe UI","Manrope","Helvetica Neue",var(--font-anthropic-sans),sans-serif;font-feature-settings:"ss01","cv11";-webkit-font-smoothing:antialiased;letter-spacing:-.005em;color:var(--ink);display:flex;flex-direction:column;gap:12px;font-weight:300}
@@ -1094,7 +1095,7 @@ let galN=0;const gasList=(id)=>new Promise((res,rej)=>{const cb='__gal'+(++galN)
  const done=()=>{clearTimeout(to);delete window[cb];sc.remove()};window[cb]=(d)=>{done();d&&d.ok?res(d.files||[]):rej(new Error('gas'))};sc.onerror=()=>{done();rej(new Error('net'))};
  sc.src=GAS_URL+'?folder='+encodeURIComponent(id)+'&callback='+cb+'&_='+Date.now();document.head.appendChild(sc)});
 const fmtD=(t)=>{const d=new Date(t);return d.toLocaleDateString('ru-RU',{day:'2-digit',month:'2-digit',year:'numeric'})+' · '+d.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'})};
-const iframeGal=(box,id)=>{box.innerHTML='<iframe title="Фото помещения" loading="lazy" referrerpolicy="no-referrer" src="https://drive.google.com/embeddedfolderview?id='+id+'#grid"></iframe>'};
+const iframeGal=(box,id)=>{box.innerHTML='<iframe title="Фото помещения" loading="lazy" referrerpolicy="no-referrer" src="https://drive.google.com/embeddedfolderview?id='+id+'#grid"></iframe>'};window.iframeGal=iframeGal;
 const tile=(f)=>{const a=document.createElement('a');a.className='gl-t';a.href='https://drive.google.com/file/d/'+f.id+'/view';a.target='_blank';a.rel='noopener noreferrer';
  if(f.mime==='application/pdf'){const p=document.createElement('i');p.textContent='PDF';a.append(p);a.classList.add('pdf')}
  else{const im=document.createElement('img');im.loading='lazy';im.alt=f.name;im.referrerPolicy='no-referrer';let k=0;const src=['https://lh3.googleusercontent.com/d/'+f.id+'=w700','https://drive.google.com/thumbnail?id='+f.id+'&sz=w700'];
@@ -1820,8 +1821,6 @@ dash.calc('norm_issues', {
       const photos = mk('div', 'sx-room-photos');
       iframeGal(photos, photoFolder);
       h.after(photos);
-      const a = mk('button', 'sx-btn'); a.type = 'button';
-      a.className = 'sx-btn hv-photo'; a.innerHTML = '<i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8.5A2.5 2.5 0 0 1 6.5 6h1.7l1.3-2h5l1.3 2h1.7A2.5 2.5 0 0 1 20 8.5v8a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 4 16.5z"/><circle cx="12" cy="12.5" r="3.4"/></svg></i>'; a.append('Фото помещения'); a.addEventListener('click', () => openGallery(room)); left.append(a);
     } else left.append(mk('div', 'sx-area hv-nophoto', 'Фото нет'));
   }
 
@@ -2064,6 +2063,7 @@ dash.calc('norm_issues', {
       var l=w.querySelector('.sx-kpi-l'),v=w.querySelector('.sx-kpi-v');if(l&&v)w.insertBefore(v,l)});
     k2=kp;head.append(kp)}
   var walk=$('#walk');if(walk){var wb=mk('div','hv-walk');wb.append('Обход ');wb.append(walk);head.append(wb)}
+  var ss=mk('div','hv-sync');ss.id='snap-st';ss.setAttribute('role','status');ss.setAttribute('aria-live','polite');head.append(ss);
   var main=$('.sx-main',ov);ov.insertBefore(head,main);
   var k2;
 

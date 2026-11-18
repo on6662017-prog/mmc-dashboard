@@ -961,6 +961,66 @@ html.io-compact .sx-cb-segs{grid-template-columns:repeat(auto-fill,minmax(64px,1
  .io-top{bottom:calc(100px + env(safe-area-inset-bottom))}
  .io-toast{bottom:calc(100px + env(safe-area-inset-bottom))}
 }
+
+/* фото в карточке помещения */
+.sx-room-photos.io-ph{background:transparent!important;box-shadow:none!important;border-radius:0!important;overflow:visible!important;margin-top:16px}
+.io-ph-h{display:flex;align-items:center;justify-content:space-between;margin:0 2px 8px;font-size:13px;color:var(--io-mut)}
+.io-ph-h b{color:var(--io-ink);font-weight:600}
+.io-ph-h a{color:var(--io-accent);text-decoration:none;font-weight:600}
+.io-ph-g{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;border-radius:18px;overflow:hidden}
+.io-ph-t{position:relative;appearance:none;border:0;padding:0;margin:0;cursor:zoom-in;aspect-ratio:1/1;background:var(--io-fill);overflow:hidden;display:block;width:100%}
+.io-ph-t:first-child{grid-column:span 2;grid-row:span 2}
+.io-ph-t img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+.io-ph-t:hover img{transform:scale(1.04)}
+.io-ph-t.err img{display:none}
+.io-ph-more{position:absolute;inset:0;display:grid;place-items:center;background:rgba(0,0,0,.42);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);color:#fff;font-size:20px;font-weight:700}
+.io-lb{position:fixed;inset:0;z-index:100;display:none;place-items:center;background:rgba(0,0,0,.86);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Inter",sans-serif}
+.io-lb.on{display:grid}
+.io-lb img{max-width:94vw;max-height:84vh;object-fit:contain;border-radius:14px;box-shadow:0 30px 80px rgba(0,0,0,.6)}
+.io-lb button{position:absolute;appearance:none;border:0;cursor:pointer;width:46px;height:46px;border-radius:50%;background:rgba(255,255,255,.16);color:#fff;font-size:26px;line-height:1;-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px)}
+.io-lb-x{top:calc(16px + env(safe-area-inset-top));right:16px;font-size:18px!important}
+.io-lb-p{left:16px;top:50%;transform:translateY(-50%)}.io-lb-n{right:16px;top:50%;transform:translateY(-50%)}
+.io-lb-c{position:absolute;bottom:calc(22px + env(safe-area-inset-bottom));left:20px;color:rgba(255,255,255,.8);font-size:13px}
+.io-lb-o{position:absolute;bottom:calc(16px + env(safe-area-inset-bottom));right:20px;color:#fff;background:rgba(255,255,255,.16);padding:8px 14px;border-radius:999px;font-size:13px;font-weight:600;text-decoration:none}
+
+/* планы этажей: карточки одной высоты, панели «Раздел» на одной линии */
+#p-floors{align-items:stretch!important}
+.p-fl{display:flex!important;flex-direction:column}
+.p-fl .sx-planview{flex:1;display:flex;align-items:center;justify-content:center}
+.p-fl .p-wrap{flex:none}
+.p-fctl{min-height:52px}
+
+/* обзор: без пустот */
+#overview .sx-main{align-items:start!important}
+#overview #dial{align-self:start!important}
+#overview .io-lcol{display:flex;flex-direction:column;gap:12px;min-width:0;order:3}
+#overview .io-lcol #to-table{align-self:flex-start}
+@media (min-width:1021px){
+ #overview .sx-main{grid-template-rows:auto 1fr!important}
+ #overview #dial{grid-column:1!important;grid-row:1!important}
+ #overview .io-lcol{grid-column:1;grid-row:2}
+ #overview .hv-right{grid-column:2!important;grid-row:1 / span 2!important}
+ #overview .io-lcol #types{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:8px}
+ #overview .io-lcol .sx-ty{margin:0!important;grid-template-columns:1fr auto!important;grid-template-rows:auto auto;row-gap:2px!important;padding:12px 14px!important;border-radius:16px!important;background:var(--io-fill)!important}
+ #overview .io-lcol .sx-ty:hover{background:var(--io-fill2)!important}
+ #overview .io-lcol .sx-ty.on{background:color-mix(in srgb,var(--io-accent) 18%,transparent)!important}
+ #overview .io-lcol .sx-ty-n{grid-column:1 / -1;font-size:12.5px;color:var(--io-mut)!important}
+ #overview .io-lcol .sx-ty-c{font-size:26px!important;font-weight:600;color:var(--io-ink)!important}
+ #overview .io-lcol .sx-ty-p{align-self:end;padding-bottom:3px}
+ #overview .io-lcol .sx-types{padding:16px 16px 14px!important}
+}
+
+@media (min-width:601px) and (max-width:1020px){
+ .hv-head{flex-wrap:wrap!important;row-gap:14px!important}
+ .hv-head h1{flex-basis:100%}
+ #kpis.hv-kpis{flex-wrap:nowrap!important;justify-content:space-between;flex:1 1 100%!important;order:2}
+ .hv-walk{order:3;margin-left:0!important}
+ .hv-sync{order:4;margin:0 0 0 auto!important;align-self:center}
+ .hv-tiles{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+ .hv-right>.hv-card.hv-donut:first-child{display:grid;grid-template-columns:200px 1fr;column-gap:24px;align-items:center}
+ .hv-right>.hv-card.hv-donut:first-child>.hv-ch,.hv-right>.hv-card.hv-donut:first-child>.hv-dn-note{grid-column:1 / -1}
+ .hv-right>.hv-card.hv-donut:first-child>.hv-dn{grid-row:span 2;margin:6px 0 10px}
+}
 /*v12end*/
 
 </style>
@@ -1166,7 +1226,7 @@ let galN=0;const gasList=(id)=>new Promise((res,rej)=>{const cb='__gal'+(++galN)
  const done=()=>{clearTimeout(to);delete window[cb];sc.remove()};window[cb]=(d)=>{done();d&&d.ok?res(d.files||[]):rej(new Error('gas'))};sc.onerror=()=>{done();rej(new Error('net'))};
  sc.src=GAS_URL+'?folder='+encodeURIComponent(id)+'&callback='+cb+'&_='+Date.now();document.head.appendChild(sc)});
 const fmtD=(t)=>{const d=new Date(t);return d.toLocaleDateString('ru-RU',{day:'2-digit',month:'2-digit',year:'numeric'})+' · '+d.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'})};
-const iframeGal=(box,id)=>{box.innerHTML='<iframe title="Фото помещения" loading="lazy" referrerpolicy="no-referrer" src="https://drive.google.com/embeddedfolderview?id='+id+'#grid"></iframe>'};window.iframeGal=iframeGal;
+const iframeGal=(box,id)=>{box.innerHTML='<iframe title="Фото помещения" loading="lazy" referrerpolicy="no-referrer" src="https://drive.google.com/embeddedfolderview?id='+id+'#grid"></iframe>'};window.iframeGal=iframeGal;window.__PH=PH;window.__FOLD=FOLD;
 const tile=(f)=>{const a=document.createElement('a');a.className='gl-t';a.href='https://drive.google.com/file/d/'+f.id+'/view';a.target='_blank';a.rel='noopener noreferrer';
  if(f.mime==='application/pdf'){const p=document.createElement('i');p.textContent='PDF';a.append(p);a.classList.add('pdf')}
  else{const im=document.createElement('img');im.loading='lazy';im.alt=f.name;im.referrerPolicy='no-referrer';let k=0;const src=['https://lh3.googleusercontent.com/d/'+f.id+'=w700','https://drive.google.com/thumbnail?id='+f.id+'&sz=w700'];
@@ -2228,6 +2288,7 @@ dash.calc('norm_issues', {
     addShare();
   });
 
+  addEventListener('hashchange',function(){var m=/[#&]room=([^&]+)/.exec(location.hash);if(m){var r=decodeURIComponent(m[1]);if(r!==dash.params().room){dash.setParams({room:r});var p=d.getElementById('profile');if(p)p.scrollIntoView({block:'start'})}}});
   function link(r){return location.origin+location.pathname+'#room='+encodeURIComponent(r)}
   function addShare(){
     var card=$('#room-card'),r=dash.params().room;if(!card||!r||$('.io-share',card))return;
@@ -2262,6 +2323,39 @@ dash.calc('norm_issues', {
     if(!nb){var w=mk('div','io-nil');nb=mk('button');nb.type='button';nb.addEventListener('click',function(){setComp(!comp)});w.append(nb);dial.append(w)}
     nb.parentNode.hidden=!n;nb.textContent=comp?('Показать разделы без данных · '+n):'Скрыть разделы без данных'}
   setComp(comp);dash.onData(function(){setTimeout(nilBtn,0)});
+
+
+  /* --- фото в карточке помещения: своя сетка на всю ширину + просмотр --- */
+  var RF={};var FO=window.__FOLD||{},PHM=window.__PH||{};Object.keys(FO).forEach(function(r){RF[FO[r]]=r});
+  var lb=null,lbL=[],lbI=0;
+  function lbOpen(L,i){lbL=L;if(!lb){lb=mk('div','io-lb','<button type="button" class="io-lb-x" aria-label="Закрыть">✕</button><button type="button" class="io-lb-p" aria-label="Назад">‹</button><img alt=""><button type="button" class="io-lb-n" aria-label="Вперёд">›</button><div class="io-lb-c"></div><a class="io-lb-o" target="_blank" rel="noopener noreferrer">Открыть в Drive</a>');d.body.append(lb);
+      lb.querySelector('.io-lb-x').onclick=lbClose;lb.querySelector('.io-lb-p').onclick=function(){lbShow(lbI-1)};lb.querySelector('.io-lb-n').onclick=function(){lbShow(lbI+1)};
+      lb.addEventListener('click',function(e){if(e.target===lb)lbClose()});
+      var x0=null;lb.addEventListener('touchstart',function(e){x0=e.touches[0].clientX},{passive:true});lb.addEventListener('touchend',function(e){if(x0==null)return;var dx=e.changedTouches[0].clientX-x0;if(Math.abs(dx)>50)lbShow(lbI+(dx<0?1:-1));x0=null});
+      d.addEventListener('keydown',function(e){if(!lb.classList.contains('on'))return;if(e.key==='Escape')lbClose();if(e.key==='ArrowRight')lbShow(lbI+1);if(e.key==='ArrowLeft')lbShow(lbI-1)})}
+    lb.classList.add('on');d.documentElement.style.overflow='hidden';lbShow(i)}
+  function lbShow(i){lbI=(i+lbL.length)%lbL.length;var f=lbL[lbI],im=lb.querySelector('img');im.src='https://drive.google.com/thumbnail?id='+f[0]+'&sz=w2000';im.onerror=function(){im.onerror=null;im.src='https://lh3.googleusercontent.com/d/'+f[0]+'=w2000'};
+    lb.querySelector('.io-lb-c').textContent=(lbI+1)+' / '+lbL.length+(f[2]?' · '+f[2].split('-').reverse().join('.'):'');lb.querySelector('.io-lb-o').href='https://drive.google.com/file/d/'+f[0]+'/view'}
+  function lbClose(){lb.classList.remove('on');d.documentElement.style.overflow=''}
+  var origGal=window.iframeGal;
+  window.iframeGal=function(box,id){
+    var r=RF[id]||dash.params().room,L=PHM[r];
+    if(!L||!L.length){if(origGal)return origGal(box,id);return}
+    L=L.slice().sort(function(a,b){return (b[2]||'').localeCompare(a[2]||'')});
+    box.classList.add('io-ph');box.innerHTML='';
+    var hd=mk('div','io-ph-h');hd.append(mk('b','','Фото · '+L.length));var fo=mk('a','','Открыть папку');fo.href='https://drive.google.com/drive/folders/'+id;fo.target='_blank';fo.rel='noopener noreferrer';hd.append(fo);box.append(hd);
+    var g=mk('div','io-ph-g'),LIM=9;
+    L.slice(0,LIM).forEach(function(f,i){var b=mk('button','io-ph-t');b.type='button';b.setAttribute('aria-label','Фото '+(i+1));
+      var im=mk('img');im.loading='lazy';im.alt=f[1]||'';im.referrerPolicy='no-referrer';var k=0,src=['https://drive.google.com/thumbnail?id='+f[0]+'&sz=w800','https://lh3.googleusercontent.com/d/'+f[0]+'=w800'];im.src=src[0];im.onerror=function(){k++;if(k<src.length)im.src=src[k];else b.classList.add('err')};
+      b.append(im);if(i===LIM-1&&L.length>LIM)b.append(mk('span','io-ph-more','+'+(L.length-LIM+1)));
+      b.addEventListener('click',function(){lbOpen(L,i)});g.append(b)});
+    box.append(g);
+  };
+
+
+  /* --- обзор: «Состав помещений» под разделами работ, без пустот --- */
+  (function(){var tc=$('#types-card'),col=tc&&tc.parentNode,main=$('#overview .sx-main'),dl=$('#dial');
+    if(col&&main&&dl&&col.parentNode!==main){col.classList.add('io-lcol');dl.after(col)}})();
 
   /* --- кнопка «наверх» --- */
   var up=mk('button','io-top',svg(IC.up));up.type='button';up.setAttribute('aria-label','Наверх');d.body.append(up);

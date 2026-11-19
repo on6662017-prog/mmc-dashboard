@@ -973,6 +973,8 @@ html.io-compact .sx-cb-segs{grid-template-columns:repeat(auto-fill,minmax(64px,1
 .io-ph-t img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s cubic-bezier(.2,.8,.2,1)}
 .io-ph-t:hover img{transform:scale(1.04)}
 .io-ph-t.err img{display:none}
+.io-ph-v{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:rgba(0,0,0,.45);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);color:#fff;font-size:16px;padding-left:3px}
+.io-ph-d{position:absolute;left:10px;bottom:10px;padding:4px 10px;border-radius:999px;background:rgba(0,0,0,.45);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);color:#fff;font-size:12px;font-weight:600}
 .io-ph-more{position:absolute;inset:0;display:grid;place-items:center;background:rgba(0,0,0,.42);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);color:#fff;font-size:20px;font-weight:700}
 .io-lb{position:fixed;inset:0;z-index:100;display:none;place-items:center;background:rgba(0,0,0,.86);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Inter",sans-serif}
 .io-lb.on{display:grid}
@@ -1226,7 +1228,7 @@ let galN=0;const gasList=(id)=>new Promise((res,rej)=>{const cb='__gal'+(++galN)
  const done=()=>{clearTimeout(to);delete window[cb];sc.remove()};window[cb]=(d)=>{done();d&&d.ok?res(d.files||[]):rej(new Error('gas'))};sc.onerror=()=>{done();rej(new Error('net'))};
  sc.src=GAS_URL+'?folder='+encodeURIComponent(id)+'&callback='+cb+'&_='+Date.now();document.head.appendChild(sc)});
 const fmtD=(t)=>{const d=new Date(t);return d.toLocaleDateString('ru-RU',{day:'2-digit',month:'2-digit',year:'numeric'})+' · '+d.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'})};
-const iframeGal=(box,id)=>{box.innerHTML='<iframe title="Фото помещения" loading="lazy" referrerpolicy="no-referrer" src="https://drive.google.com/embeddedfolderview?id='+id+'#grid"></iframe>'};window.iframeGal=iframeGal;window.__PH=PH;window.__FOLD=FOLD;
+const iframeGal=(box,id)=>{box.innerHTML='<iframe title="Фото помещения" loading="lazy" referrerpolicy="no-referrer" src="https://drive.google.com/embeddedfolderview?id='+id+'#grid"></iframe>'};window.iframeGal=iframeGal;window.__GAS='https://script.google.com/macros/s/AKfycby5RvNH91ZH_XyLP25gV-qrYNDZqjVD7LEV8rGcJA-3c3sUhs0pTvBgRMpGs3xlT1T5/exec';window.__PH=PH;window.__FOLD=FOLD;
 const tile=(f)=>{const a=document.createElement('a');a.className='gl-t';a.href='https://drive.google.com/file/d/'+f.id+'/view';a.target='_blank';a.rel='noopener noreferrer';
  if(f.mime==='application/pdf'){const p=document.createElement('i');p.textContent='PDF';a.append(p);a.classList.add('pdf')}
  else{const im=document.createElement('img');im.loading='lazy';im.alt=f.name;im.referrerPolicy='no-referrer';let k=0;const src=['https://lh3.googleusercontent.com/d/'+f.id+'=w700','https://drive.google.com/thumbnail?id='+f.id+'&sz=w700'];
@@ -2334,25 +2336,37 @@ dash.calc('norm_issues', {
       var x0=null;lb.addEventListener('touchstart',function(e){x0=e.touches[0].clientX},{passive:true});lb.addEventListener('touchend',function(e){if(x0==null)return;var dx=e.changedTouches[0].clientX-x0;if(Math.abs(dx)>50)lbShow(lbI+(dx<0?1:-1));x0=null});
       d.addEventListener('keydown',function(e){if(!lb.classList.contains('on'))return;if(e.key==='Escape')lbClose();if(e.key==='ArrowRight')lbShow(lbI+1);if(e.key==='ArrowLeft')lbShow(lbI-1)})}
     lb.classList.add('on');d.documentElement.style.overflow='hidden';lbShow(i)}
-  function lbShow(i){lbI=(i+lbL.length)%lbL.length;var f=lbL[lbI],im=lb.querySelector('img');im.src='https://drive.google.com/thumbnail?id='+f[0]+'&sz=w2000';im.onerror=function(){im.onerror=null;im.src='https://lh3.googleusercontent.com/d/'+f[0]+'=w2000'};
-    lb.querySelector('.io-lb-c').textContent=(lbI+1)+' / '+lbL.length+(f[2]?' · '+f[2].split('-').reverse().join('.'):'');lb.querySelector('.io-lb-o').href='https://drive.google.com/file/d/'+f[0]+'/view'}
+  function lbShow(i){lbI=(i+lbL.length)%lbL.length;var f=lbL[lbI],im=lb.querySelector('img');im.src='https://drive.google.com/thumbnail?id='+f.id+'&sz=w2000';im.onerror=function(){im.onerror=null;im.src='https://lh3.googleusercontent.com/d/'+f.id+'=w2000'};
+    lb.querySelector('.io-lb-c').textContent=(lbI+1)+' / '+lbL.length+(f.created?' · '+fmt(f.created):'')+(/^video\//.test(f.mime||'')?' · видео — откройте в Drive':'');lb.querySelector('.io-lb-o').href='https://drive.google.com/file/d/'+f.id+'/view'}
   function lbClose(){lb.classList.remove('on');d.documentElement.style.overflow=''}
-  var origGal=window.iframeGal;
-  window.iframeGal=function(box,id){
-    var r=RF[id]||dash.params().room,L=PHM[r];
-    if(!L||!L.length){if(origGal)return origGal(box,id);return}
-    L=L.slice().sort(function(a,b){return (b[2]||'').localeCompare(a[2]||'')});
+  var origGal=window.iframeGal,GAS=window.__GAS||'',gN=0,gMem={};
+  function gasList(id){if(gMem[id]&&Date.now()-gMem[id].t<120000)return Promise.resolve(gMem[id].f);
+    return new Promise(function(res,rej){var cb='__iog'+(++gN),sc=d.createElement('script'),to=setTimeout(function(){done();rej(new Error('timeout'))},15000);
+      function done(){clearTimeout(to);try{delete window[cb]}catch(e){window[cb]=undefined}sc.remove()}
+      window[cb]=function(x){done();if(x&&x.ok){gMem[id]={t:Date.now(),f:x.files||[]};res(x.files||[])}else rej(new Error('gas'))};
+      sc.onerror=function(){done();rej(new Error('net'))};sc.src=GAS+'?folder='+encodeURIComponent(id)+'&callback='+cb+'&_='+Date.now();d.head.appendChild(sc)})}
+  function fromPH(r){var L=PHM[r]||[];return L.map(function(f){return {id:f[0],name:f[1],created:f[2]?Date.parse(f[2]):0}})}
+  function fmt(t){if(!t)return '';var x=new Date(t);return x.toLocaleDateString('ru-RU',{day:'2-digit',month:'2-digit',year:'numeric'})}
+  function render(box,id,L,live){
+    L=L.filter(function(f){return !f.mime||/^(image|video)\//.test(f.mime)}).sort(function(a,b){return (b.created||0)-(a.created||0)});
     box.classList.add('io-ph');box.innerHTML='';
-    var hd=mk('div','io-ph-h');hd.append(mk('b','','Фото · '+L.length));var fo=mk('a','','Открыть папку');fo.href='https://drive.google.com/drive/folders/'+id;fo.target='_blank';fo.rel='noopener noreferrer';hd.append(fo);box.append(hd);
+    var hd=mk('div','io-ph-h');hd.append(mk('b','',L.length?('Фото и видео · '+L.length+' · сначала новые'):'В папке пока нет фото'));var fo=mk('a','','Открыть папку');fo.href='https://drive.google.com/drive/folders/'+id;fo.target='_blank';fo.rel='noopener noreferrer';hd.append(fo);box.append(hd);
+    if(!L.length)return;
     var g=mk('div','io-ph-g'),LIM=9;
-    L.slice(0,LIM).forEach(function(f,i){var b=mk('button','io-ph-t');b.type='button';b.setAttribute('aria-label','Фото '+(i+1));
-      var im=mk('img');im.loading='lazy';im.alt=f[1]||'';im.referrerPolicy='no-referrer';var k=0,src=['https://drive.google.com/thumbnail?id='+f[0]+'&sz=w800','https://lh3.googleusercontent.com/d/'+f[0]+'=w800'];im.src=src[0];im.onerror=function(){k++;if(k<src.length)im.src=src[k];else b.classList.add('err')};
-      b.append(im);if(i===LIM-1&&L.length>LIM)b.append(mk('span','io-ph-more','+'+(L.length-LIM+1)));
+    L.slice(0,LIM).forEach(function(f,i){var b=mk('button','io-ph-t');b.type='button';b.setAttribute('aria-label','Фото '+(i+1)+(f.created?' от '+fmt(f.created):''));
+      var im=mk('img');im.loading='lazy';im.alt=f.name||'';im.referrerPolicy='no-referrer';var k=0,src=['https://drive.google.com/thumbnail?id='+f.id+'&sz=w800','https://lh3.googleusercontent.com/d/'+f.id+'=w800'];im.src=src[0];im.onerror=function(){k++;if(k<src.length)im.src=src[k];else b.classList.add('err')};
+      b.append(im);if(/^video\//.test(f.mime||''))b.append(mk('span','io-ph-v','▶'));if(i===0&&f.created)b.append(mk('span','io-ph-d',fmt(f.created)));
+      if(i===LIM-1&&L.length>LIM)b.append(mk('span','io-ph-more','+'+(L.length-LIM+1)));
       b.addEventListener('click',function(){lbOpen(L,i)});g.append(b)});
     box.append(g);
+  }
+  window.iframeGal=function(box,id){
+    var r=RF[id]||dash.params().room,ph=fromPH(r);
+    if(GAS){box.dataset.gid=id;if(ph.length)render(box,id,ph);else box.innerHTML='<div class="io-ph-h"><b>Загружаю фото…</b></div>';
+      gasList(id).then(function(L){if(box.dataset.gid===id&&box.isConnected)render(box,id,L,true)}).catch(function(){if(box.dataset.gid!==id)return;if(ph.length)render(box,id,ph);else if(origGal)origGal(box,id)});return}
+    if(ph.length)return render(box,id,ph);
+    if(origGal)origGal(box,id);
   };
-
-
   /* --- обзор: «Состав помещений» под разделами работ, без пустот --- */
   (function(){var tc=$('#types-card'),col=tc&&tc.parentNode,main=$('#overview .sx-main'),dl=$('#dial');
     if(col&&main&&dl&&col.parentNode!==main){col.classList.add('io-lcol');dl.after(col)}})();

@@ -1023,6 +1023,9 @@ html.io-compact .sx-cb-segs{grid-template-columns:repeat(auto-fill,minmax(64px,1
  .hv-right>.hv-card.hv-donut:first-child>.hv-ch,.hv-right>.hv-card.hv-donut:first-child>.hv-dn-note{grid-column:1 / -1}
  .hv-right>.hv-card.hv-donut:first-child>.hv-dn{grid-row:span 2;margin:6px 0 10px}
 }
+.sx-staff-g{margin-top:10px}
+.sx-staff-g b{display:block;font-size:12.5px;font-weight:600;color:var(--io-ink,#111)}
+.sx-staff-l{display:flex;flex-wrap:wrap;gap:4px 12px;margin-top:4px;font-size:13px;color:var(--io-mut,#666)}
 /*v12end*/
 /* ===== v10 · сводка дверей, возраст обхода, таблица, разделы на телефоне ===== */
 html.io-compact .sx-wk.nil,html.io-compact .sx-sb.nil,html.io-compact .io-nc{display:none!important}
@@ -1301,16 +1304,16 @@ window.dash={loader:(id,o)=>{loaders[id]=o},calc:(id,o)=>{calcs[id]=o},onData:f=
  data:id=>{if(id==='photos')return photos();if(id==='plans')return{status:'ok',data:PLANS,meta:[]};if(cache[id])return{status:'ok',data:cache[id],meta:[]};const c=calcs[id];if(c){if(!memo.has(id)){const ins=c.inputs.map(i=>window.dash.data(i));if(ins.some(x=>x.status!=='ok'))return{status:'loading',data:[],meta:[]};memo.set(id,c.fn(...ins.map(x=>x.data)))}return{status:'ok',data:memo.get(id),meta:[]}}return{status:'missing',data:[],meta:[]}}};
 const PLANS=[1,3,6].map(f=>({floor:String(f),title:f+' этаж — зоны МЧП',image:'plans/'+f+'.webp?v=3'}));
 const fixPhoto=(rows)=>rows.forEach(r=>{if(!r.photo&&FOLD[r.room])r.photo='https://drive.google.com/drive/folders/'+FOLD[r.room]});
-const put=async(answers)=>{for(const id of ['rooms','norms','crews','airbox','doors']){if(!answers[id])continue;const r=await loaders[id].fn({answer:answers[id],call:async()=>({})});cache[id]=r.rows||r.data}fixPhoto(cache.rooms);memo.clear();fire()};
+const put=async(answers)=>{for(const id of ['rooms','norms','crews','airbox','doors','staff']){if(!answers[id])continue;const r=await loaders[id].fn({answer:answers[id],call:async()=>({})});cache[id]=r.rows||r.data}fixPhoto(cache.rooms);memo.clear();fire()};
 let n=0;const gv=(sheet)=>new Promise((res,rej)=>{const cb='__gv'+(++n);const s=document.createElement('script');const to=setTimeout(()=>{cleanup();rej(new Error('timeout'))},12000);
  const cleanup=()=>{clearTimeout(to);delete window[cb];s.remove()};window[cb]=(d)=>{cleanup();d&&d.status!=='error'?res(d.table):rej(new Error('gviz'))};s.onerror=()=>{cleanup();rej(new Error('net'))};
  s.src='https://docs.google.com/spreadsheets/d/'+SID+'/gviz/tq?headers=1&sheet='+encodeURIComponent(sheet)+'&tqx=responseHandler:'+cb+'&_='+Date.now();document.head.appendChild(s)});
 const cell=(c)=>c==null?'':(c.f!=null?String(c.f):c.v==null?'':String(c.v));
-async function live(){st('Обновляю из таблицы…');try{const[a,b,c,m1,m2,ab,dr]=await Promise.all([gv('Помещения'),gv('Нормативы'),gv('Бригады').catch(()=>null),gv('МИП-НАНО').catch(()=>null),gv('МОНАРТ').catch(()=>null),gv('Воздухозаборки').catch(()=>null),gv('Двери').catch(()=>null)]);
+async function live(){st('Обновляю из таблицы…');try{const[a,b,c,m1,m2,ab,dr,sf]=await Promise.all([gv('Помещения'),gv('Нормативы'),gv('Бригады').catch(()=>null),gv('МИП-НАНО').catch(()=>null),gv('МОНАРТ').catch(()=>null),gv('Воздухозаборки').catch(()=>null),gv('Двери').catch(()=>null),gv('Персонал').catch(()=>null)]);
  const sh=(t)=>t?{data:[{rowData:[{values:t.cols.map(c=>({formattedValue:c.label||''}))}].concat(t.rows.map(r=>({values:(r.c||[]).map(c=>({formattedValue:cell(c)}))})))}]}:null;
  const ra=[{values:[]}].concat(a.rows.map(r=>({values:(r.c||[]).map(c=>({formattedValue:cell(c)}))})));
  const nb=[['h']].concat(b.rows.map(r=>(r.c||[]).map(cell)));
- if(ra.length<3)throw new Error('empty');const cv=c?[['h']].concat(c.rows.map(r=>(r.c||[]).map(cell))):null;await put(Object.assign(dr?{doors:{values:[['h']].concat(dr.rows.map(r=>(r.c||[]).map(cell)))}}:{},ab?{airbox:{values:[['h']].concat(ab.rows.map(r=>(r.c||[]).map(cell)))}}:{},{rooms:{sheets:[{data:[{rowData:ra}]},sh(m1),sh(m2)].filter(Boolean)},norms:{values:nb}},cv?{crews:{values:cv}}:{}));
+ if(ra.length<3)throw new Error('empty');const cv=c?[['h']].concat(c.rows.map(r=>(r.c||[]).map(cell))):null;await put(Object.assign(sf?{staff:{values:[['h']].concat(sf.rows.map(r=>(r.c||[]).map(cell)))}}:{},dr?{doors:{values:[['h']].concat(dr.rows.map(r=>(r.c||[]).map(cell)))}}:{},ab?{airbox:{values:[['h']].concat(ab.rows.map(r=>(r.c||[]).map(cell)))}}:{},{rooms:{sheets:[{data:[{rowData:ra}]},sh(m1),sh(m2)].filter(Boolean)},norms:{values:nb}},cv?{crews:{values:cv}}:{}));
  const d=new Date();st('Онлайн · обновлено '+d.toLocaleDateString('ru-RU')+' '+d.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'}));
 }catch(e){st('Нет связи с таблицей · данные на 13.10.2026')}}
 const GAS_URL='';
@@ -1472,6 +1475,17 @@ dash.loader('crews', {
     const data = v.slice(1).map((r) => ({ system: String(r[0] || '').trim(), crew: String(r[1] || '').trim(), rooms: String(r[2] || '').trim(), comment: String(r[3] || '').trim() }))
       .filter((r) => r.system && r.crew);
     return { columns: ['system', 'crew', 'rooms', 'comment'], data };
+  },
+});
+
+dash.loader('staff', {
+  description: 'Строки листа «Персонал»: сотрудник (фамилия и инициалы), должность, раздел работ (ОВ, АОВ, ЭОМ, Полы, АР, ИТР).',
+  fn: async ({ answer }) => {
+    const a = typeof answer === 'string' ? JSON.parse(answer) : answer;
+    if (a && a.error) throw new Error(a.error.message || String(a.error));
+    const v = (a && a.values) || [];
+    const data = v.slice(1).map((r) => ({ name: String(r[0] || '').trim(), pos: String(r[1] || '').trim(), sec: String(r[2] || '').trim() })).filter((r) => r.name);
+    return { columns: ['name', 'pos', 'sec'], data };
   },
 });
 
@@ -2039,6 +2053,13 @@ dash.calc('norm_issues', {
 
     { const CRw = dash.data('crews'), cr = (CRw.status === 'ok' ? CRw.data : []).filter((c) => c.system.toLowerCase() === 'ар' && c.rooms.split(/[,;\s]+/).includes(room.room));
       if (cr.length) { const bl = mk('div', 'sx-area'); bl.append('Бригада АР: ', mk('b', '', cr.map((c) => c.crew).join(', '))); c.append(bl); } }
+    { const SF = dash.data('staff'), SEC = [['ОВ', 'Вентиляция (ОВ)'], ['АОВ', 'Автоматизация ОВ'], ['ЭОМ', 'Электрика (ЭОМ)'], ['Полы', 'Полы']];
+      const sf = SF.status === 'ok' ? SF.data : [];
+      const grp = SEC.map(([k, l]) => [l, sf.filter((x) => x.sec === k)]).filter(([, a]) => a.length);
+      if (grp.length) { const bl = mk('div', 'sx-area sx-staff'); bl.dataset.source = 'staff'; bl.append('Исполнители');
+        grp.forEach(([l, a]) => { const r = mk('div', 'sx-staff-g'); r.append(mk('b', '', l + ' — ' + [...new Set(a.map((x) => x.pos))].join(', ') + ' · ' + a.length)); const ul = mk('div', 'sx-staff-l');
+          a.forEach((x) => { const it = mk('span', '', x.name); it.title = x.pos; ul.append(it); }); r.append(ul); bl.append(r); });
+        c.append(bl); } }
     if (room.cls || room.dept) { const cl = mk('div', 'sx-area'); cl.append(room.cls ? 'Класс чистоты ' : '', room.cls ? mark(mk('b', '', room.cls), 'rooms', 'cls', W) : '', room.cls && room.dept ? ' · ' : '', room.dept ? mark(mk('span', '', room.dept), 'rooms', 'dept', W) : ''); c.append(cl); }
     const ft = mk('div', 'sx-area'); ft.append('МИП-НАНО: ', mark(mk('span', '', room.mip_date || '—'), 'rooms', 'mip_date', W)); c.append(ft);
     if (room.comment) c.append(mark(mk('div', 'sx-com', room.comment), 'rooms', 'comment', W));

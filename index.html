@@ -1024,24 +1024,40 @@ html.io-compact .sx-cb-segs{grid-template-columns:repeat(auto-fill,minmax(64px,1
  .hv-right>.hv-card.hv-donut:first-child>.hv-dn{grid-row:span 2;margin:6px 0 10px}
 }
 /*v12end*/
+/* ===== v10 · сводка дверей, возраст обхода, таблица, разделы на телефоне ===== */
+html.io-compact .sx-wk.nil,html.io-compact .sx-sb.nil,html.io-compact .io-nc{display:none!important}
+.hv-walk .io-age{font-size:12px;color:var(--io-mut)}
+.hv-walk.io-old b{background:color-mix(in srgb,var(--io-wip) 16%,transparent)!important;color:#b25e00!important}
+.hv-walk.io-old b::before{background:var(--io-wip)!important;box-shadow:0 0 0 3px color-mix(in srgb,var(--io-wip) 25%,transparent)!important}
+.hv-walk.io-old .io-age{color:#b25e00;font-weight:600}
+html[data-theme=dark] .hv-walk.io-old b,html[data-theme=dark] .hv-walk.io-old .io-age{color:#ffb340!important}
+.io-leg{font-size:12px;color:var(--io-mut);margin:0 2px 10px}
+.io-leg b{color:var(--io-ok);font-weight:600}.io-leg i{font-style:normal;color:var(--io-wip);font-weight:600}
+.sx-dr-l{flex-wrap:wrap}
+.sx-dr-l .sx-dr-x{display:block;flex-basis:100%;margin:2px 0 0 18px;font-size:11.5px;color:var(--io-mut)}
+.io-doors{margin-top:22px;padding:22px 24px;border-radius:28px;background:var(--io-glass);-webkit-backdrop-filter:var(--io-blur);backdrop-filter:var(--io-blur);border:.5px solid var(--io-edge);box-shadow:var(--io-sh)}
+.io-doors-h{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:4px}
+.io-doors-h b{font-size:15px;font-weight:600;color:var(--io-ink)}.io-doors-h span{font-size:12.5px;color:var(--io-mut)}
+.io-doors-h button,.io-tbtn{margin-left:auto;appearance:none;border:0;cursor:pointer;background:var(--io-fill);color:var(--io-accent);font:inherit;font-size:13px;font-weight:600;padding:8px 14px;border-radius:999px;white-space:nowrap}
+.io-doors-h button:hover,.io-tbtn:hover{background:var(--io-fill2)}
+.io-doors-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px 22px;margin-top:14px}
+.io-doors-g h4{margin:0 0 6px;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--io-mut)}
+.io-doors-g ul{list-style:none;margin:0;padding:0}
+.io-doors-g li{display:flex;justify-content:space-between;gap:10px;padding:5px 0;border-bottom:.5px solid var(--io-line);font-size:13.5px;color:var(--io-ink)}
+.io-doors-g li:last-child{border-bottom:0}.io-doors-g li b{font-variant-numeric:tabular-nums;font-weight:600}
+.io-doors-g li.mut{color:var(--io-mut)}
+.io-doors-n{font-size:12px;color:var(--io-mut);margin-top:12px}
+#rooms-table th:first-child,#rooms-table td:first-child{position:sticky;left:0;z-index:2;background:var(--io-glass-solid)}
+#rooms-table thead th:first-child{z-index:3}
+.io-tbtn{margin-left:0}
+html.io-paged .sx-sec:not(.io-cur){display:none!important}
+@media (max-width:600px){.io-doors{padding:18px 16px;border-radius:22px}.io-doors-g{grid-template-columns:1fr 1fr;gap:12px 16px}.io-doors-h button{margin-left:0}}
 
 </style>
 
 <script>(function(){if(document.querySelector(".hv-bg"))return;var b=document.createElement("div");b.className="hv-bg";b.setAttribute("aria-hidden","true");b.innerHTML='<div class="f"><i class="a"></i><i class="b"></i><i class="c"></i><i class="d"></i><i class="e"></i><i class="g"></i><i class="h"></i></div>';document.body.prepend(b)})()</script>
 <div class="sx">
   <!-- HERO -->
-  <section class="sx-sec light" id="plan">
-    <div class="sx-h2"><h2>Схема <span id="p-title">этажей 1 · 3 · 6</span></h2>
-      <div class="sx-gtools">
-        <button class="sx-chip" type="button" id="p-out" aria-label="Уменьшить">−</button>
-        <button class="sx-chip" type="button" id="p-in" aria-label="Увеличить">+</button>
-        <a class="sx-btn ghost" id="p-pdf" href="https://drive.google.com/file/d/1nObs-UcYNBBcgMN4H3xQJUelSQhxMZsF/view" target="_blank" rel="noopener noreferrer"><i><svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></i>PDF</a>
-      </div>
-    </div>
-    <p class="sx-gnote">Раздел выбирается под каждым планом. Нажмите на помещение или дверь — внизу появятся детали.</p>
-    <div class="p-sys" id="p-sys" role="tablist" aria-label="Раздел работ"></div><div class="p-leg" id="p-leg"></div><div class="p-info" id="p-info">Нажмите на помещение на плане.</div><svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><pattern id="p-hatch" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="10" height="10" fill="#fff" fill-opacity=".5"/><line x1="0" y1="0" x2="0" y2="10" stroke="#8a8f94" stroke-width="2"/></pattern></defs></svg><div id="p-floors" data-source="plans"></div>
-  </section>
-
   <section class="sx-sec sx-grid-bg" id="overview">
     <div class="sx-top">
       <div class="sx-brand"><span class="sx-mark"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6"><circle cx="12" cy="12" r="8"/><path d="M12 4v16M4 12h16" stroke-opacity=".45"/><circle cx="12" cy="12" r="3" fill="#fff" stroke="none"/></svg></span>ММЦ Мосфильмовская</div>
@@ -1057,9 +1073,9 @@ html.io-compact .sx-cb-segs{grid-template-columns:repeat(auto-fill,minmax(64px,1
 
     <div class="sx-main">
       <div class="sx-col" id="kpis">
+        <div class="sx-glass sx-kpi"><div class="sx-kpi-l"><small>Итог</small>работ готово</div><div class="sx-kpi-v"><span class="dash-skeleton" id="k-done">—</span><sup>%</sup></div></div>
+        <div class="sx-glass sx-kpi"><div class="sx-kpi-l"><small>Процесс</small>ещё в работе</div><div class="sx-kpi-v"><span class="dash-skeleton" id="k-work">—</span><sup>%</sup></div></div>
         <div class="sx-glass sx-kpi"><div class="sx-kpi-l"><small>МЧП</small>чистых помещений</div><div class="sx-kpi-v dash-skeleton" id="k-rooms">—</div></div>
-        <div class="sx-glass sx-kpi"><div class="sx-kpi-l"><small>Процесс</small>работ ведётся</div><div class="sx-kpi-v"><span class="dash-skeleton" id="k-work">—</span><sup>%</sup></div></div>
-        <div class="sx-glass sx-kpi"><div class="sx-kpi-l"><small>Сдача</small>помещений готово</div><div class="sx-kpi-v dash-skeleton" id="k-done">—</div></div>
       </div>
 
       <div class="sx-dialbox rd" id="dial" data-source="by_system summary">
@@ -1082,6 +1098,18 @@ html.io-compact .sx-cb-segs{grid-template-columns:repeat(auto-fill,minmax(64px,1
   </section>
 
   <!-- PROFILE + ROOM CARD -->
+
+  <section class="sx-sec light" id="plan">
+    <div class="sx-h2"><h2>Схема <span id="p-title">этажей 1 · 3 · 6</span></h2>
+      <div class="sx-gtools">
+        <button class="sx-chip" type="button" id="p-out" aria-label="Уменьшить">−</button>
+        <button class="sx-chip" type="button" id="p-in" aria-label="Увеличить">+</button>
+        <a class="sx-btn ghost" id="p-pdf" href="https://drive.google.com/file/d/1nObs-UcYNBBcgMN4H3xQJUelSQhxMZsF/view" target="_blank" rel="noopener noreferrer"><i><svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></i>PDF</a>
+      </div>
+    </div>
+    <p class="sx-gnote">Раздел выбирается под каждым планом. Нажмите на помещение или дверь — внизу появятся детали.</p>
+    <div class="p-sys" id="p-sys" role="tablist" aria-label="Раздел работ"></div><div class="p-leg" id="p-leg"></div><div class="p-info" id="p-info">Нажмите на помещение на плане.</div><svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><pattern id="p-hatch" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="10" height="10" fill="#fff" fill-opacity=".5"/><line x1="0" y1="0" x2="0" y2="10" stroke="#8a8f94" stroke-width="2"/></pattern></defs></svg><div id="p-floors" data-source="plans"></div>
+  </section>
 
   <section class="sx-sec light" id="profile">
     <div class="sx-two">
@@ -1250,7 +1278,7 @@ html.io-compact .sx-cb-segs{grid-template-columns:repeat(auto-fill,minmax(64px,1
 
 
 <script>try{if(self!==top)document.documentElement.classList.add("in-frame")}catch(e){document.documentElement.classList.add("in-frame")}</script><script>try{if(!matchMedia("(prefers-reduced-motion: reduce)").matches&&"IntersectionObserver"in window){document.documentElement.classList.add("js-rv");const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}}),{rootMargin:"0px 0px -8% 0px"});const go=()=>document.querySelectorAll(".sx-sec").forEach(x=>io.observe(x));document.readyState==="loading"?addEventListener("DOMContentLoaded",go):go();setTimeout(()=>document.querySelectorAll(".sx-sec").forEach(x=>x.classList.add("in")),4000)}}catch(e){}</script><nav class="sx-tabbar" id="sx-tabbar" aria-label="Разделы">
-<button type="button" data-go="plan"><svg viewBox="0 0 24 24"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z"/><path d="M9 4v14M15 6v14"/></svg>Схема</button><button type="button" data-go="overview"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 12l4-4"/></svg>Обзор</button>
+<button type="button" data-go="overview"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 12l4-4"/></svg>Обзор</button><button type="button" data-go="plan"><svg viewBox="0 0 24 24"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z"/><path d="M9 4v14M15 6v14"/></svg>Схема</button>
 <button type="button" data-go="profile"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg>Помещения</button>
 <button type="button" data-go="systems"><svg viewBox="0 0 24 24"><path d="M4 18h16M4 13h16M4 8h16"/></svg>Этажи</button>
 <button type="button" data-go="works"><svg viewBox="0 0 24 24"><path d="M4 20h16M7 16V9M12 16V5M17 16v-4"/></svg>Работы</button>
@@ -1271,7 +1299,7 @@ const photos=()=>{const r=params.gallery,L=(r&&PH[r])||[];return{status:'ok',met
 window.dash={loader:(id,o)=>{loaders[id]=o},calc:(id,o)=>{calcs[id]=o},onData:f=>{subs.push(f)},params:()=>params,
  setParams:p=>{params={...params,...p};fire()},resetParams:()=>{},refresh:(id)=>{if(id==='rooms')live()},colors:[],
  data:id=>{if(id==='photos')return photos();if(id==='plans')return{status:'ok',data:PLANS,meta:[]};if(cache[id])return{status:'ok',data:cache[id],meta:[]};const c=calcs[id];if(c){if(!memo.has(id)){const ins=c.inputs.map(i=>window.dash.data(i));if(ins.some(x=>x.status!=='ok'))return{status:'loading',data:[],meta:[]};memo.set(id,c.fn(...ins.map(x=>x.data)))}return{status:'ok',data:memo.get(id),meta:[]}}return{status:'missing',data:[],meta:[]}}};
-const PLANS=[1,3,6].map(f=>({floor:String(f),title:f+' этаж — зоны МЧП',image:'plans/'+f+'.jpg?v=2'}));
+const PLANS=[1,3,6].map(f=>({floor:String(f),title:f+' этаж — зоны МЧП',image:'plans/'+f+'.webp?v=3'}));
 const fixPhoto=(rows)=>rows.forEach(r=>{if(!r.photo&&FOLD[r.room])r.photo='https://drive.google.com/drive/folders/'+FOLD[r.room]});
 const put=async(answers)=>{for(const id of ['rooms','norms','crews','airbox','doors']){if(!answers[id])continue;const r=await loaders[id].fn({answer:answers[id],call:async()=>({})});cache[id]=r.rows||r.data}fixPhoto(cache.rooms);memo.clear();fire()};
 let n=0;const gv=(sheet)=>new Promise((res,rej)=>{const cb='__gv'+(++n);const s=document.createElement('script');const to=setTimeout(()=>{cleanup();rej(new Error('timeout'))},12000);
@@ -1364,7 +1392,7 @@ dash.loader('doors', {
   fn: ({ answer }) => {
     const a = typeof answer === 'string' ? JSON.parse(answer) : answer;
     if (a && a.error) throw new Error(a.error.message || String(a.error));
-    const k = ['n','span','mark','w','wn','h','fact','open','leaves','dir','drive','skud','fire','xray','bump','win','panic','note','status'];
+    const k = ['n','span','mark','w','wn','h','fact','open','leaves','dir','drive','skud','fire','xray','bump','win','panic','note','status','lock','handle','thr','ral'];
     const rows = ((a && a.values) || []).slice(1).filter((r) => r && r[1]).map((r) => { const o = {}; k.forEach((c, i) => { o[c] = r[i] == null ? '' : String(r[i]).trim(); }); o.n = Number(o.n) || o.n; return o; });
     return { columns: k, rows };
   },
@@ -1677,6 +1705,8 @@ dash.calc('norm_issues', {
   const PSYS = [['all','Общая','Общая готовность']].concat(SYS.map((x) => [x[0], x[2], x[1]]));
   const PCOL = { r: '#2f9e5b', w: '#e0a526', n: '#d9493a', x: '' };
   const PTXT = { r: 'Готово', w: 'В работе', n: 'Не готово', x: 'Не предусмотрено' };
+  const PBK = ['b0', 'b1', 'b2', 'b3', 'b4'], PBC = { b0: '#d9493a', b1: '#ec8a2f', b2: '#e8c33a', b3: '#8cc152', b4: '#2f9e5b' }, PBL = { b0: 'до 25%', b1: '25–49%', b2: '50–74%', b3: '75–99%', b4: 'Готово' };
+  const pBk = (pc) => pc >= 100 ? 'b4' : pc >= 75 ? 'b3' : pc >= 50 ? 'b2' : pc >= 25 ? 'b1' : 'b0';
   const pSysF = { '1': 'all', '3': 'all', '6': 'all' }; let pSys = 'all', pSel = null, pOpenF = '6';
   const pState = (r, sys = pSys) => {
     if (sys !== 'all') { const s = r[sys]; return s === 'Готово' ? ['r'] : s === 'В работе' ? ['w'] : s === 'Не готово' ? ['n'] : ['x']; }
@@ -1708,7 +1738,7 @@ dash.calc('norm_issues', {
   addEventListener('keydown', (e) => { if (e.key === 'Escape' && !sheet.hidden) closeSheet(); });
   $('#p-floors').addEventListener('click', (e) => {
     const tg = e.target.closest('.p-trig'); if (tg) { pOpenF = tg.dataset.f; openSheet(); return; }
-    const dc = e.target.closest('.p-door'); if (dc) { const d = (dash.data('doors').data || []).find((x) => String(x.n) === dc.dataset.door); if (d) $('#p-info').innerHTML = '<b>' + pEsc(d.mark) + '</b> · ' + pEsc(d.span) + ' — ' + pEsc((d.wn || d.w) + '×' + (parseInt(d.h) || d.h)) + ', ' + pEsc(d.open) + ', ' + pEsc(d.drive) + ' — <b>' + pEsc(d.status || 'статус не указан') + '</b>'; return; }
+    const dc = e.target.closest('.p-door'); if (dc) { const d = (dash.data('doors').data || []).find((x) => String(x.n) === dc.dataset.door); if (d) $('#p-info').innerHTML = '<b>' + pEsc(d.mark) + '</b> · ' + pEsc(d.span) + ' — ' + pEsc((d.wn || d.w) + '×' + (parseInt(d.h) || d.h)) + ', ' + pEsc(d.open) + ', ' + pEsc(d.drive) + [d.fire, d.lock && d.lock !== '-' ? d.lock : '', d.handle, d.thr].filter(Boolean).map((v) => ', ' + pEsc(v)).join('') + ' — <b>' + pEsc(d.status || 'статус не указан') + '</b>'; return; }
     const g = e.target.closest('polygon'); if (!g) return; pSel = g.dataset.room; renderPlan(); });
   $('#p-info').addEventListener('click', (e) => { if (e.target.closest('button') && pSel) { const rm = (dash.data('rooms').data || []).find((x) => x.room === pSel); if (rm) pickRoom(rm.room, true); } });
   const pEsc = (v) => String(v).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
@@ -1727,9 +1757,9 @@ dash.calc('norm_issues', {
       const svg = box.querySelector('svg[data-f="' + f + '"]'); svg.querySelectorAll('polygon').forEach((n) => n.remove());
       const c = { r: 0, w: 0, n: 0, x: 0 };
       Object.entries(PGEO).forEach(([code, g]) => {
-        if (g[0] !== f) return; const r = by[code]; if (!r) return; const [k] = pState(r, sys); cnt[k]++; c[k]++;
+        if (g[0] !== f) return; const r = by[code]; if (!r) return; const [k0, pc0] = pState(r, sys), k = (sys === 'all' && k0 !== 'x') ? pBk(pc0) : k0; cnt[k] = (cnt[k] || 0) + 1; c[k] = (c[k] || 0) + 1;
         const pg = document.createElementNS(SVGNS, 'polygon'); pg.setAttribute('points', g[1]); pg.dataset.room = code;
-        if (k === 'x') pg.setAttribute('class', 'x'); else pg.style.fill = PCOL[k]; if (code === pSel) pg.classList.add('sel');
+        if (k === 'x') pg.setAttribute('class', 'x'); else pg.style.fill = PCOL[k] || PBC[k]; if (code === pSel) pg.classList.add('sel');
         const t = document.createElementNS(SVGNS, 'title'); t.textContent = code + ' ' + (r.name || ''); pg.append(t); svg.append(pg);
       });
       svg.querySelectorAll('.p-door').forEach((n) => n.remove());
@@ -1738,10 +1768,10 @@ dash.calc('norm_issues', {
         const g = document.createElementNS(SVGNS, 'circle'); g.setAttribute('cx', q[1]); g.setAttribute('cy', q[2]); g.setAttribute('r', 26); g.setAttribute('class', 'p-door ' + st); g.dataset.door = d.n;
         const t = document.createElementNS(SVGNS, 'title'); t.textContent = d.mark + ' · ' + d.span; g.append(t); svg.append(g); }); }
       fl.querySelector('small').textContent = '';
-      fl.querySelector('.p-fleg').innerHTML = ['r', 'w', 'n', 'x'].filter((k) => c[k] || k !== 'x').map((k) => '<span><i class="' + k + '"></i>' + (sys === 'all' ? LBLA : LBL)[k] + ' <b>' + c[k] + '</b></span>').join('');
+      fl.querySelector('.p-fleg').innerHTML = sys === 'all' ? PBK.filter((k) => c[k]).concat(c.x ? ['x'] : []).map((k) => '<span><i ' + (k === 'x' ? 'class="x"' : 'style="background:' + PBC[k] + '"') + '></i>' + (PBL[k] || 'Нет работ') + ' <b>' + c[k] + '</b></span>').join('') : ['r', 'w', 'n', 'x'].filter((k) => c[k] || k !== 'x').map((k) => '<span><i class="' + k + '"></i>' + LBL[k] + ' <b>' + (c[k] || 0) + '</b></span>').join('');
     });
     const pf = pSel && PGEO[pSel] ? PGEO[pSel][0] : '6', psys = pSysF[pf], name = PSYS.find((x) => x[0] === psys)[2];
-    $('#p-leg').innerHTML = '<span style="color:var(--ink);font-weight:600">' + pEsc(name) + ':</span>' + ['r', 'w', 'n', 'x'].filter((k) => cnt[k] || k !== 'x').map((k) => '<span><i style="background:' + (PCOL[k] || 'repeating-linear-gradient(45deg,#8a8f94 0 2px,#fff 2px 5px)') + '"></i>' + (pSys === 'all' ? { r: 'Всё готово', w: 'Частично', n: 'Не начато', x: 'Нет работ' }[k] : PTXT[k]) + ' · ' + cnt[k] + '</span>').join('');
+    $('#p-leg').innerHTML = '<span style="color:var(--ink);font-weight:600">' + pEsc(name) + ':</span>' + (pSys === 'all' ? PBK.filter((k) => cnt[k]).map((k) => '<span><i style="background:' + PBC[k] + '"></i>' + PBL[k] + ' · ' + cnt[k] + '</span>').join('') : '') + ['r', 'w', 'n', 'x'].filter((k) => pSys !== 'all' && (cnt[k] || k !== 'x')).map((k) => '<span><i style="background:' + (PCOL[k] || 'repeating-linear-gradient(45deg,#8a8f94 0 2px,#fff 2px 5px)') + '"></i>' + (pSys === 'all' ? { r: 'Всё готово', w: 'Частично', n: 'Не начато', x: 'Нет работ' }[k] : PTXT[k]) + ' · ' + cnt[k] + '</span>').join('');
     const r = pSel && by[pSel];
     if (r && PGEO[pSel]) { const [k, pc] = pState(r, psys); $('#p-info').innerHTML = '<b>' + pEsc(r.room) + '</b> · ' + pEsc(r.name || '') + ' — ' + (psys === 'all' ? 'готово ' + pc + '%' : pEsc(name) + ': ' + PTXT[k]) + '<button type="button">Карточка</button>'; }
     else $('#p-info').textContent = 'Нажмите на помещение на плане.';
@@ -1769,7 +1799,7 @@ dash.calc('norm_issues', {
     grid.replaceChildren(...SYS.map(([k, full]) => {
       const rel = scope.filter((r) => r[k] && r[k] !== 'Не предусмотрено');
       const rd = rel.filter((r) => r[k] === 'Готово').sort(byNum), wp = rel.filter((r) => r[k] === 'В работе').sort(byNum);
-      const card = mk('div', 'sx-wk');
+      const card = mk('div', 'sx-wk' + (rel.length ? '' : ' nil'));
       const h = mk('div', 'sx-wk-h'); h.append(mk('b', '', full), mk('small', '', rel.length ? rel.length + ' пом. по проекту' : 'не предусмотрено'));
       const v = mk('div', 'sx-wk-v'); v.append(mk('span', '', String(rd.length)), document.createTextNode('выполнено в ' + plural(rd.length) + (wp.length ? ' · ' + wp.length + ' в работе' : '')));
       const bar = mk('div', 'sx-wk-bar');
@@ -1889,7 +1919,7 @@ dash.calc('norm_issues', {
       const b = mk('button', 'rd-row' + (on ? ' on' : '') + (dim ? ' dim' : '')); b.type = 'button'; b.style.setProperty('--d', (n * 40) + 'ms');
       b.title = 'Готово ' + r.ready_pct + '% · в работе ' + r.work_pct + '% · не готово ' + r.not_pct + '% · ' + r.applicable + ' пом.';
       const bar = mk('span', 'rd-bar sm'); const ir = mk('i', 'r'), iw = mk('i', 'w'); bar.append(ir, iw);
-      const v = mk('span', 'rd-v'); if (!r.applicable) { b.classList.add('nil'); v.append(mk('small', 'nd', 'нет данных')); } else { v.append(mk('b', '', r.ready_pct + '%')); if (r.work_pct) v.append(mk('small', '', '+' + r.work_pct)); }
+      const v = mk('span', 'rd-v'); if (!r.applicable) { b.classList.add('nil'); v.append(mk('small', 'nd', 'нет данных')); } else { v.append(mk('b', '', r.ready_pct + '%')); if (r.work_pct) { const sm = mk('small', '', '+' + r.work_pct); sm.title = 'ещё ' + r.work_pct + '% в работе'; v.append(sm); } }
       b.append(mk('span', 'rd-n', def[2]), bar, v); L.append(b);
       grow(ir, r.ready_pct); grow(iw, r.work_pct);
       b.addEventListener('click', () => dash.setParams({ sys: on ? null : r.system }));
@@ -2002,6 +2032,7 @@ dash.calc('norm_issues', {
       const dd = mk('div', 'sx-area sx-dr'); dd.dataset.source = 'doors'; dd.append('Двери · ' + drl.length);
       drl.forEach((x) => { const l = mk('div', 'sx-dr-l'); const stc = x.status === 'Готово' ? 'r' : x.status === 'В работе' ? 'w' : x.status === 'Не готово' ? 'n' : 'x';
         l.append(mk('i', 'dot ' + stc), mk('b', '', x.mark || '—'), mk('span', '', (x.wn || x.w) + '×' + (parseInt(x.h) || x.h) + ' · ' + (x.open === 'откатная' ? 'откатная' : 'расп.') + ' · ' + (x.leaves || '').replace('двухств/', '2-ств. ').replace('одноств', '1-ств.') + ' · ' + (x.drive === 'автоматический' ? 'автомат' : 'доводчик') + (x.fire ? ' · ' + x.fire : '')));
+        { const ex = [x.lock && x.lock !== '-' ? x.lock : '', x.handle, x.thr, x.ral ? 'RAL ' + x.ral : '', x.panic].filter(Boolean).join(' · '); if (ex) l.append(mk('small', 'sx-dr-x', ex)); }
         l.title = x.span + (x.status ? ' — ' + x.status : '') + (x.note ? ' — ' + x.note : ''); dd.append(l); });
       c.append(dd);
     }
@@ -2099,7 +2130,7 @@ dash.calc('norm_issues', {
     mark($('#walk'), 'summary', 'last_walk', W).textContent = sum.last_walk;
     mark($('#k-rooms'), 'summary', 'rooms', W).textContent = sum.rooms;
     mark($('#k-work'), 'summary', 'work_pct', W).textContent = sum.work_pct;
-    mark($('#k-done'), 'summary', 'rooms_done', W).textContent = sum.rooms_done;
+    mark($('#k-done'), 'summary', 'ready_pct', W).textContent = sum.ready_pct;
 
     /* systems: dial + bars + takeaway */
     if (BS.status === 'ok') {
@@ -2115,7 +2146,7 @@ dash.calc('norm_issues', {
         '% готово), сильнее всего отстаёт ', mark(mk('b', '', worst.label), 'by_system', 'label', { ...sw, system: worst.system }), ' — ', mark(mk('b', '', worst.not_pct), 'by_system', 'not_pct', { ...sw, system: worst.system }), '% помещений не начаты.');
       $('#sysbars').replaceChildren(...rows.map((r) => {
         const w = { ...sw, system: r.system };
-        const row = mk('div', 'sx-sb' + (s.sys === r.system ? ' on' : ''));
+        const row = mk('div', 'sx-sb' + (s.sys === r.system ? ' on' : '') + (r.applicable ? '' : ' nil'));
         const bar = mk('div', 'sx-sb-bar');
         [['ready_pct', C.ok], ['work_pct', C.wip], ['not_pct', C.nr]].forEach(([f, col]) => { if (r[f] > 0) { const i = mk('i'); i.style.width = r[f] + '%'; i.style.background = grad(col); i.className = bcls(col); bar.append(i); } });
         const v = mk('span', 'sx-sb-v'); v.append(mark(mk('span', '', r.ready_pct), 'by_system', 'ready_pct', w), '%');
@@ -2172,7 +2203,7 @@ dash.calc('norm_issues', {
     var el=document.getElementById(b.dataset.go);if(!el)return;
     el.scrollIntoView({behavior:'smooth',block:'start'});mark(b.dataset.go);
   })});
-  mark('plan');
+  mark('overview');
   if('IntersectionObserver' in window){
     var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)mark(e.target.id)})},{rootMargin:'-40% 0px -55% 0px'});
     ['plan','overview','profile','systems','works','rooms'].forEach(function(id){var el=document.getElementById(id);if(el)io.observe(el)});
@@ -2216,7 +2247,7 @@ dash.calc('norm_issues', {
   }
 
   /* --- верхняя панель --- */
-  var NAV=[['plan','Схема'],['overview','Обзор'],['profile','Помещения'],['systems','Этажи'],['works','Работы'],['rooms','Таблица']];
+  var NAV=[['overview','Обзор'],['plan','Схема'],['profile','Помещения'],['systems','Этажи'],['works','Работы'],['rooms','Таблица']];
   var top=mk('header','hv-top');
   top.innerHTML='<div class="hv-brand"><span class="hv-logo"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><rect x="4.5" y="4.5" width="15" height="15" rx="4"/><path d="M12 8v8M8 12h8"/></svg></span><span><b>ММЦ Мосфильмовская</b><small>Готовность помещений</small></span></div>'+
     '<nav class="hv-nav" aria-label="Разделы">'+NAV.map(function(n){return '<button type="button" data-go="'+n[0]+'">'+n[1]+'</button>'}).join('')+'</nav>'+
@@ -2228,7 +2259,7 @@ dash.calc('norm_issues', {
   var nav=$('.hv-nav',top),go=Pill(nav),cur='';
   function setOn(id){if(id===cur)return;cur=id;var b=null;[].forEach.call(nav.children,function(x){if(x.dataset&&x.dataset.go){x.classList.toggle('on',x.dataset.go===id);if(x.dataset.go===id)b=x}});go(b)}
   nav.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;var s=d.getElementById(b.dataset.go);if(s){s.hidden=false;s.scrollIntoView({behavior:RM?'auto':'smooth',block:'start'})}setOn(b.dataset.go)});
-  requestAnimationFrame(function(){setOn('plan')});
+  requestAnimationFrame(function(){setOn('overview')});
   if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)setOn(e.target.id)})},{rootMargin:'-35% 0px -60% 0px'});NAV.forEach(function(n){var s=d.getElementById(n[0]);if(s)io.observe(s)})}
   addEventListener('resize',function(){var c=cur;cur='';setOn(c)});
 
@@ -2254,7 +2285,7 @@ dash.calc('norm_issues', {
   /* --- шапка обзора --- */
   var head=mk('div','hv-head');head.innerHTML='<h1>Готовность<span>помещений</span></h1>';
   var kp=$('#kpis');
-  if(kp){kp.classList.add('hv-kpis');var ic=['rooms','work','done'];[].forEach.call(kp.querySelectorAll('.sx-kpi'),function(k,i){var w=mk('div','hv-kw');while(k.firstChild)w.append(k.firstChild);k.append(w);k.prepend(mk('span','hv-ki',svg(ic[i]||'done')));
+  if(kp){kp.classList.add('hv-kpis');var ic=['done','work','rooms'];[].forEach.call(kp.querySelectorAll('.sx-kpi'),function(k,i){var w=mk('div','hv-kw');while(k.firstChild)w.append(k.firstChild);k.append(w);k.prepend(mk('span','hv-ki',svg(ic[i]||'done')));
       var l=w.querySelector('.sx-kpi-l'),v=w.querySelector('.sx-kpi-v');if(l&&v)w.insertBefore(v,l)});
     k2=kp;head.append(kp)}
   var walk=$('#walk');if(walk){var wb=mk('div','hv-walk');wb.append('Обход ');wb.append(walk);head.append(wb)}
@@ -2385,8 +2416,12 @@ dash.calc('norm_issues', {
   var dial=$('#dial'),nb=null;
   function nilBtn(){if(!dial)return;var n=dial.querySelectorAll('.rd-row.nil').length;
     if(!nb){var w=mk('div','io-nil');nb=mk('button');nb.type='button';nb.addEventListener('click',function(){setComp(!comp)});w.append(nb);dial.append(w)}
-    nb.parentNode.hidden=!n;nb.textContent=comp?('Показать разделы без данных · '+n):'Скрыть разделы без данных'}
+    nb.parentNode.hidden=!n;nb.textContent=comp?('Показать разделы без данных · '+n):'Скрыть разделы без данных';
+    [['#works-grid','.sx-wk.nil'],['#sysbars','.sx-sb.nil']].forEach(function(x){var g=$(x[0]);if(!g)return;var k=g.querySelectorAll(x[1]).length,w=g.nextElementSibling;
+      if(!w||!w.classList.contains('io-nil')){w=mk('div','io-nil');var b=mk('button');b.type='button';b.addEventListener('click',function(){setComp(!comp)});w.append(b);g.after(w)}
+      w.hidden=!k;w.firstChild.textContent=comp?('Показать разделы без данных · '+k):'Скрыть разделы без данных'})}
   setComp(comp);dash.onData(function(){setTimeout(nilBtn,0)});
+  window.__ioComp={toggle:function(){setComp(!comp)},on:function(){return comp}};
 
 
   /* --- фото в карточке помещения: своя сетка на всю ширину + просмотр --- */
@@ -2440,4 +2475,81 @@ dash.calc('norm_issues', {
 })();
 
 window.__boot();
+</script><script>
+/* ===== v10 · возраст обхода, сводка дверей, таблица, разделы на телефоне ===== */
+(function(){
+  var d=document,H=d.documentElement,$=function(q,r){return (r||d).querySelector(q)},$$=function(q,r){return [].slice.call((r||d).querySelectorAll(q))};
+  var mk=function(t,c,x){var e=d.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e};
+  var later=function(f){var t=0;return function(){clearTimeout(t);t=setTimeout(f,60)}};
+
+  /* --- насколько свежий обход --- */
+  function age(){var w=$('#walk');if(!w)return;var host=w.parentNode,a=$('.io-age',host),m=/(\d{2})\.(\d{2})\.(\d{4})/.exec(w.textContent||'');
+    if(!m){if(a)a.remove();host.classList.remove('io-old');return}
+    var days=Math.floor((Date.now()-new Date(+m[3],m[2]-1,+m[1]))/864e5);
+    if(!a){a=mk('span','io-age');host.append(a)}
+    a.textContent=days<=0?'сегодня':days===1?'вчера':days+' дн. назад';
+    host.classList.toggle('io-old',days>7);host.title=days>7?'Последнему обходу больше недели: данные могут быть устаревшими':''}
+
+  /* --- подсказка к разделам работ --- */
+  function legend(){var dl=$('#dial');if(!dl||$('.io-leg',dl))return;var p=mk('p','io-leg');p.innerHTML='<b>Цифра</b> — доля готовых работ, <i>+N</i> — ещё в работе, %';dl.insertBefore(p,dl.firstChild)}
+
+  /* --- двери: комплектация --- */
+  var cap=function(v){v=String(v||'').trim();return v?v.charAt(0).toUpperCase()+v.slice(1):''};
+  var G=[
+    ['Монтаж',function(x){return x.status||'Статус не указан'}],
+    ['Привод',function(x){return x.drive}],
+    ['Створки',function(x){return (x.leaves||'').replace('двухств/','двухстворчатая, ').replace('одноств','одностворчатая')}],
+    ['Открывание',function(x){return x.open==='расп'?'распашная':x.open}],
+    ['Замок',function(x){return x.lock&&x.lock!=='-'?x.lock:(x.lock==='-'?'Без замка':'')}],
+    ['Ручка',function(x){return x.handle}],
+    ['Порог',function(x){return x.thr}],
+    ['Огнестойкость',function(x){return x.fire||'Без класса'}]
+  ];
+  var F=[['СКУД',function(x){return /да/i.test(x.skud)}],['Рентгензащита',function(x){return !!x.xray&&x.xray!=='-'}],['Антипаника',function(x){return !!x.panic&&x.panic!=='-'}],['Смотровое окно',function(x){return /\d/.test(x.win)}],['Отбойник',function(x){return /да/i.test(x.bump)}]];
+  function csv(L){var K=[['mark','Маркировка'],['span','Проём'],['w','Ширина проект'],['wn','Ширина'],['h','Высота'],['fact','Факт'],['open','Открывание'],['leaves','Створки'],['dir','Направление'],['drive','Привод'],['skud','СКУД'],['fire','Огнестойкость'],['xray','Рентген'],['bump','Отбойник'],['win','Окно'],['panic','Антипаника'],['lock','Замок'],['handle','Ручка'],['thr','Порог'],['ral','RAL'],['status','Монтаж'],['note','Примечание']];
+    var q=function(v){v=String(v==null?'':v);return /[;"\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v};
+    var t='﻿'+K.map(function(k){return k[1]}).join(';')+'\n'+L.map(function(x){return K.map(function(k){return q(x[k[0]])}).join(';')}).join('\n');
+    var a=mk('a');a.href=URL.createObjectURL(new Blob([t],{type:'text/csv;charset=utf-8'}));a.download='Двери_спецификация.csv';d.body.append(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},500)}
+  function doors(){var D=dash.data('doors');if(!D||D.status!=='ok')return;var L=(D.data||[]).filter(function(x){return x.span});var ov=$('#overview');if(!ov||!L.length)return;
+    var box=$('#io-doors');if(!box){box=mk('div','io-doors');box.id='io-doors';ov.append(box)}
+    box.replaceChildren();
+    var h=mk('div','io-doors-h');h.append(mk('b',null,'Двери · комплектация'),mk('span',null,L.length+' проёмов по листу «Двери»'));
+    var b=mk('button',null,'Скачать спецификацию');b.type='button';b.addEventListener('click',function(){csv(L)});h.append(b);box.append(h);
+    var g=mk('div','io-doors-g');
+    G.forEach(function(gr){var c={};L.forEach(function(x){var v=cap(gr[1](x));if(v)c[v]=(c[v]||0)+1});var ks=Object.keys(c);if(!ks.length)return;
+      ks.sort(function(a,b){return c[b]-c[a]});var col=mk('div');col.append(mk('h4',null,gr[0]));var ul=mk('ul');
+      ks.forEach(function(k){var li=mk('li',/не указан|без /i.test(k)?'mut':'');li.append(mk('span',null,k),mk('b',null,String(c[k])));ul.append(li)});col.append(ul);g.append(col)});
+    var col=mk('div');col.append(mk('h4',null,'Оснащение'));var ul=mk('ul');
+    F.forEach(function(f){var n=L.filter(f[1]).length;if(!n)return;var li=mk('li');li.append(mk('span',null,f[0]),mk('b',null,String(n)));ul.append(li)});
+    if(ul.children.length){col.append(ul);g.append(col)}
+    box.append(g);
+    var ns=L.filter(function(x){return !x.status}).length;
+    if(ns===L.length)box.append(mk('div','io-doors-n','Статус монтажа на листе «Двери» пока не заполнен — поэтому на схеме двери серые.'));
+  }
+
+  /* --- таблица: пустые колонки --- */
+  var EMPTY=/^(—|-|Не предусмотрено)?$/;
+  function tcols(){var t=$('#rooms-table');if(!t)return;var th=$$('thead th',t),rows=$$('tbody tr',t),nil=0;
+    th.forEach(function(h,i){if(i<4)return;var e=rows.length>0&&rows.every(function(r){var c=r.children[i];return !c||EMPTY.test(c.textContent.trim())});
+      h.classList.toggle('io-nc',e);rows.forEach(function(r){var c=r.children[i];if(c)c.classList.toggle('io-nc',e)});if(e)nil++});
+    var tools=$('#rooms .sx-tools');if(!tools||!window.__ioComp)return;var bt=$('.io-tbtn',tools);
+    if(!bt){bt=mk('button','io-tbtn');bt.type='button';bt.addEventListener('click',function(){window.__ioComp.toggle();tcols()});tools.append(bt)}
+    bt.hidden=!nil;bt.textContent=window.__ioComp.on()?('Показать пустые колонки · '+nil):'Скрыть пустые колонки'}
+  var tb=$('#rooms-table tbody');if(tb)new MutationObserver(later(tcols)).observe(tb,{childList:true});
+
+  /* --- телефон: один раздел на экране --- */
+  var MQ=matchMedia('(max-width:760px)'),PG={gallery:'profile',docs:'profile'},page='overview';
+  function setPage(id){id=PG[id]||id;page=id;$$('.sx-sec').forEach(function(s){s.classList.toggle('io-cur',(PG[s.id]||s.id)===id)})}
+  function mode(){H.classList.toggle('io-paged',MQ.matches);setPage(page)}
+  var orig=Element.prototype.scrollIntoView;
+  Element.prototype.scrollIntoView=function(){
+    if(H.classList.contains('io-paged')&&this.closest){var sec=this.closest('.sx-sec');
+      if(sec){var id=PG[sec.id]||sec.id;if(id!==page){setPage(id);if(this===sec){scrollTo(0,0);return}}else if(this===sec){scrollTo({top:0,behavior:'smooth'});return}}}
+    return orig.apply(this,arguments)};
+  if(MQ.addEventListener)MQ.addEventListener('change',mode);mode();
+
+  var run=later(function(){try{age()}catch(e){}try{legend()}catch(e){}try{doors()}catch(e){}try{tcols()}catch(e){}});
+  dash.onData(run);run();
+})();
+
 </script></div></body></html>

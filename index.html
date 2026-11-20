@@ -1054,6 +1054,14 @@ html[data-theme=dark] .hv-walk.io-old b,html[data-theme=dark] .hv-walk.io-old .i
 #rooms-table thead th:first-child{z-index:3}
 .io-tbtn{margin-left:0}
 html.io-paged .sx-sec:not(.io-cur){display:none!important}
+/* v11 · список помещений на всю высоту карточки */
+@media (min-width:981px){
+#profile .sx-two{align-items:stretch}
+#profile .sx-two>div:first-child{display:flex;flex-direction:column;min-height:0}
+#profile #room-wrap{flex:1 1 auto;min-height:560px;position:relative}
+#profile #room-grid{position:absolute;inset:0;max-height:none!important;height:auto}
+}
+
 @media (max-width:600px){.io-doors{padding:18px 16px;border-radius:22px}.io-doors-g{grid-template-columns:1fr 1fr;gap:12px 16px}.io-doors-h button{margin-left:0}}
 
 </style>

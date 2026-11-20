@@ -1023,7 +1023,6 @@ html.io-compact .sx-cb-segs{grid-template-columns:repeat(auto-fill,minmax(64px,1
  .hv-right>.hv-card.hv-donut:first-child>.hv-ch,.hv-right>.hv-card.hv-donut:first-child>.hv-dn-note{grid-column:1 / -1}
  .hv-right>.hv-card.hv-donut:first-child>.hv-dn{grid-row:span 2;margin:6px 0 10px}
 }
-.sx-ab-none{margin-top:6px;font-size:13px;color:var(--io-mut2,#999)}
 /*v12end*/
 
 </style>
@@ -1996,10 +1995,6 @@ dash.calc('norm_issues', {
     if (abl.length) {
       const ab = mk('div', 'sx-area sx-ab'); ab.dataset.source = 'airbox'; ab.append('Воздухозаборки');
       abl.forEach((x) => { const l = mk('div', 'sx-ab-l'); l.append(mk('b', x.type === 'Вытяжка' ? 'ex' : 'rc', x.type), mk('span', '', (x.qty || '—') + ' шт · ' + (x.flow || '—') + ' м³/ч · корыто ' + (x.trough || '—'))); ab.append(l); });
-      c.append(ab);
-    } else if (AB.status === 'ok') {
-      const ab = mk('div', 'sx-area sx-ab'); ab.dataset.source = 'airbox'; ab.append('Воздухозаборки');
-      ab.append(mk('div', 'sx-ab-none', 'Этого помещения нет на листе «Воздухозаборки»'));
       c.append(ab);
     }
     const DR = dash.data('doors'), drl = DR.status === 'ok' ? DR.data.filter((x) => String(x.span).split(/[-–\s(),]+/).includes(room.room)) : [];
